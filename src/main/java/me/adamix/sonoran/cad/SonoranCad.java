@@ -6,15 +6,20 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import me.adamix.sonoran.Sonoran;
 import me.adamix.sonoran.cad.data.CadAccount;
+import me.adamix.sonoran.cad.data.CadCharacter;
+import me.adamix.sonoran.cad.data.Result;
 import me.adamix.sonoran.http.handler.response.Response;
 import me.adamix.sonoran.http.payload.JsonPayload;
 import me.adamix.sonoran.http.request.SonoranRequest;
+import me.adamix.sonoran.http.request.civilian.GetCharactersRequest;
 import me.adamix.sonoran.http.request.general.GetAccountRequest;
 import org.apache.hc.core5.http.ParseException;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class SonoranCad {
@@ -52,16 +57,16 @@ public class SonoranCad {
 		);
 	}
 
-	public void getAccount(@NotNull String username, @NotNull Consumer<CadAccount> consumer) {
+	public void getAccount(@NotNull String username, @NotNull Consumer<Result<CadAccount>> consumer) {
 		sendRequest(new GetAccountRequest(username), (response) -> {
 			if (response instanceof Response.Error(Exception exception)) {
-				throw new RuntimeException("Unexpected exception while retrieving sonoran account", exception);
+				consumer.accept(new Result.Exception<>(exception));
 			}
 			else if (response instanceof Response.Success success) {
 				if (success.statusCode() != 200) {
-					throw new RuntimeException("Request failed with status code: " + success.statusCode());
+					consumer.accept(new Result.Error<>(success.statusCode(), success.body()));
 				} else {
-					consumer.accept(CadAccount.parse(success.jsonBody()));
+					consumer.accept(new Result.Success<>(CadAccount.parse(success.jsonBody()), success));
 				}
 			}
 		});
