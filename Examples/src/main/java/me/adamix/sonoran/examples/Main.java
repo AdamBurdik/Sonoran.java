@@ -43,6 +43,15 @@ public class Main {
 			}
 		});
 
+		cad.getVersion((result) -> {
+			switch (result) {
+				case Result.Success<String> success -> System.out.println("Version: " + success.value());
+				case Result.Error<String> error -> System.out.println(error.message());
+				case Result.Exception<String> exception -> throw new RuntimeException(exception.exception());
+				default -> throw new IllegalStateException("Unexpected value: " + result);
+			}
+		});
+
 		sonoran.shutdown();
 	}
 }

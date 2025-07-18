@@ -13,6 +13,7 @@ import me.adamix.sonoran.http.payload.JsonPayload;
 import me.adamix.sonoran.http.request.SonoranRequest;
 import me.adamix.sonoran.http.request.general.GetAccountRequest;
 import me.adamix.sonoran.http.request.general.GetServersRequest;
+import me.adamix.sonoran.http.request.general.GetVersionRequest;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -88,6 +89,21 @@ public class SonoranCad {
 					}
 
 					consumer.accept(new Result.Success<>(list, success));
+				}
+			}
+		}));
+	}
+
+	public void getVersion(@NotNull Consumer<Result<String>> consumer) {
+		sendRequest(new GetVersionRequest(), (response -> {
+			if (response instanceof Response.Error(Exception exception)) {
+				consumer.accept(new Result.Exception<>(exception));
+			}
+			else if (response instanceof Response.Success success) {
+				if (success.statusCode() != 200) {
+					consumer.accept(new Result.Error<>(success.statusCode(), success.body()));
+				} else {
+					consumer.accept(new Result.Success<>(success.body(), success));
 				}
 			}
 		}));
