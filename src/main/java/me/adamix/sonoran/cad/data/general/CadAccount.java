@@ -1,6 +1,5 @@
-package me.adamix.sonoran.cad.data;
+package me.adamix.sonoran.cad.data.general;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 
