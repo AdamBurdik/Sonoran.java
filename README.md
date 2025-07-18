@@ -22,11 +22,11 @@ I plan to support all major Sonoran CAD API endpoints in future updates.
 # How To Use
 1. Add Sonoran.java as a dependency to your project, using jitpack
 ```kotlin
-    maven { url = uri("https://www.jitpack.io") }
+maven { url = uri("https://www.jitpack.io") }
 
-	dependencies {
-	        implementation("com.github.adamBurdik:Sonoran.java:v1.0.3")
-	}
+dependencies {
+    implementation("com.github.adamBurdik:Sonoran.java:v1.0.3")
+}
 ```
 2. Create Sonoran instance with cad. 
 ```java
