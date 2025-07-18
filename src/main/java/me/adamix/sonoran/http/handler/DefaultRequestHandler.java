@@ -45,7 +45,6 @@ public class DefaultRequestHandler implements RequestHandler {
 
 	@Override
 	public void scheduleRequest(@NotNull String url, @NotNull Payload payload, @NotNull Map<String, Object> headers, @NotNull Consumer<Response> consumer) {
-		System.out.println("scheduling request to " + url);
 		queue.add(new Task(url, payload, headers, consumer));
 		if (!isProcessing.get()) {
 			startProcessing();
@@ -60,7 +59,6 @@ public class DefaultRequestHandler implements RequestHandler {
 
 			post.setEntity(payload.getEntity());
 
-			System.out.println("sending post: " + payload);
 			try (CloseableHttpResponse response = httpClient.execute(post)) {
 				String responseBody = EntityUtils.toString(response.getEntity());
 
@@ -73,19 +71,16 @@ public class DefaultRequestHandler implements RequestHandler {
 	}
 
 	private void startProcessing() {
-		System.out.println("processing");
 		isProcessing.set(true);
 		executor.submit(() -> {
 			while (!queue.isEmpty()) {
 
 				Task task = queue.poll();
-				System.out.println("processing: " + task);
 				if (task == null) {
 					break;
 				}
 
 				Response response = sendPostRequest(task.url, task.payload, task.headers);
-				System.out.println("response: " + response);
 				task.consumer.accept(response);
 			}
 			isProcessing.set(false);
