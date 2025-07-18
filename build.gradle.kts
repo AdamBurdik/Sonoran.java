@@ -31,3 +31,23 @@ tasks.shadowJar {
 tasks.build {
     dependsOn(tasks.shadowJar)
 }
+
+sourceSets {
+    create("examples") {
+        java.srcDir("Examples")
+        compileClasspath += sourceSets["main"].output + configurations["compileClasspath"]
+        runtimeClasspath += output + compileClasspath + sourceSets["main"].runtimeClasspath
+    }
+}
+
+val compileExamples by tasks.registering(JavaCompile::class) {
+    source = sourceSets["examples"].java
+    classpath = sourceSets["examples"].compileClasspath
+    destinationDirectory.set(layout.buildDirectory.dir("classes/examples"))
+}
+
+val runExample by tasks.registering(JavaExec::class) {
+    dependsOn(compileExamples)
+    mainClass.set("me.adamix.sonoran.examples.Main")
+    classpath = files(layout.buildDirectory.dir("classes/examples")) + sourceSets["main"].runtimeClasspath
+}
