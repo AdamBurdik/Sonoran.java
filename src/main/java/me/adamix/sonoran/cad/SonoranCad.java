@@ -51,4 +51,19 @@ public class SonoranCad {
 				consumer
 		);
 	}
+
+	public void getAccount(@NotNull String username, @NotNull Consumer<CadAccount> consumer) {
+		sendRequest(new GetAccountRequest(username), (response) -> {
+			if (response instanceof Response.Error(Exception exception)) {
+				throw new RuntimeException("Unexpected exception while retrieving sonoran account", exception);
+			}
+			else if (response instanceof Response.Success success) {
+				if (success.statusCode() != 200) {
+					throw new RuntimeException("Request failed with status code: " + success.statusCode());
+				} else {
+					consumer.accept(CadAccount.parse(success.jsonBody()));
+				}
+			}
+		});
+	}
 }
