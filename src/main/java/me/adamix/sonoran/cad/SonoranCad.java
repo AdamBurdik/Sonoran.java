@@ -5,21 +5,19 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import me.adamix.sonoran.Sonoran;
-import me.adamix.sonoran.cad.data.CadAccount;
-import me.adamix.sonoran.cad.data.CadCharacter;
+import me.adamix.sonoran.cad.data.general.CadAccount;
 import me.adamix.sonoran.cad.data.Result;
+import me.adamix.sonoran.cad.data.general.CadServer;
 import me.adamix.sonoran.http.handler.response.Response;
 import me.adamix.sonoran.http.payload.JsonPayload;
 import me.adamix.sonoran.http.request.SonoranRequest;
-import me.adamix.sonoran.http.request.civilian.GetCharactersRequest;
 import me.adamix.sonoran.http.request.general.GetAccountRequest;
-import org.apache.hc.core5.http.ParseException;
+import me.adamix.sonoran.http.request.general.GetServersRequest;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.function.Consumer;
 
 public class SonoranCad {
@@ -70,5 +68,28 @@ public class SonoranCad {
 				}
 			}
 		});
+	}
+
+	public void getServers(@NotNull Consumer<Result<List<CadServer>>> consumer) {
+		sendRequest(new GetServersRequest(), (response -> {
+			if (response instanceof Response.Error(Exception exception)) {
+				consumer.accept(new Result.Exception<>(exception));
+			}
+			else if (response instanceof Response.Success success) {
+				if (success.statusCode() != 200) {
+					consumer.accept(new Result.Error<>(success.statusCode(), success.body()));
+				} else {
+					JsonObject json = success.jsonBody();
+					JsonArray servers = json.get("servers").getAsJsonArray();
+					List<CadServer> list = new ArrayList<>();
+					for (JsonElement server : servers) {
+						CadServer parsed = CadServer.parse(server.getAsJsonObject());
+						list.add(parsed);
+					}
+
+					consumer.accept(new Result.Success<>(list, success));
+				}
+			}
+		}));
 	}
 }
