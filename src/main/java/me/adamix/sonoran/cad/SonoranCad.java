@@ -5,12 +5,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import me.adamix.sonoran.Sonoran;
+import me.adamix.sonoran.cad.data.CadCharacter;
 import me.adamix.sonoran.cad.data.general.CadAccount;
 import me.adamix.sonoran.cad.data.result.Result;
 import me.adamix.sonoran.cad.data.general.CadServer;
 import me.adamix.sonoran.http.handler.response.Response;
 import me.adamix.sonoran.http.payload.JsonPayload;
 import me.adamix.sonoran.http.request.SonoranRequest;
+import me.adamix.sonoran.http.request.civilian.GetCharactersRequest;
 import me.adamix.sonoran.http.request.general.GetAccountRequest;
 import me.adamix.sonoran.http.request.general.GetServersRequest;
 import me.adamix.sonoran.http.request.general.GetVersionRequest;
@@ -20,6 +22,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class SonoranCad {
@@ -69,7 +72,7 @@ public class SonoranCad {
 	}
 
 	public @NotNull Result<String> getVersion() {
-		Result<String> result=  new Result<>();
+		Result<String> result = new Result<>();
 
 		sendRequest(new GetVersionRequest(), response -> {
 			result.completeFromStringResponse(response, string -> string);
@@ -79,7 +82,7 @@ public class SonoranCad {
 	}
 
 	public @NotNull Result<List<CadServer>> getServers() {
-		Result<List<CadServer>> result=  new Result<>();
+		Result<List<CadServer>> result = new Result<>();
 
 		sendRequest(new GetServersRequest(), response -> {
 			result.completeFromJsonResponse(response, json -> {
@@ -93,6 +96,26 @@ public class SonoranCad {
 				}
 
 				return list;
+			});
+		});
+
+		return result;
+	}
+
+	public @NotNull Result<List<CadCharacter>> getCharacters(@NotNull UUID acountUuid) {
+		Result<List<CadCharacter>> result = new Result<>();
+
+		sendRequest(new GetCharactersRequest(acountUuid), response -> {
+			result.completeFromJsonResponse(response, json -> {
+				JsonArray array = json.getAsJsonArray();
+
+				List<CadCharacter> characterList = new ArrayList<>();
+
+				for (JsonElement characterObject : array) {
+					characterList.add(CadCharacter.parse(characterObject.getAsJsonObject()));
+				}
+
+				return characterList;
 			});
 		});
 
