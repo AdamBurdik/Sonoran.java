@@ -25,7 +25,7 @@ I plan to support all major Sonoran CAD API endpoints in future updates.
 maven { url = uri("https://www.jitpack.io") }
 
 dependencies {
-    implementation("com.github.adamBurdik:Sonoran.java:v1.0.3")
+    implementation("com.github.adamBurdik:Sonoran.java:VERSION") // Get version from https://github.com/AdamBurdik/Sonoran.java/releases
 }
 ```
 2. Create Sonoran instance with cad. 
