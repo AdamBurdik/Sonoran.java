@@ -6,7 +6,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import me.adamix.sonoran.Sonoran;
 import me.adamix.sonoran.cad.data.general.CadAccount;
-import me.adamix.sonoran.cad.data.Result;
+import me.adamix.sonoran.cad.data.result.Result;
 import me.adamix.sonoran.cad.data.general.CadServer;
 import me.adamix.sonoran.http.handler.response.Response;
 import me.adamix.sonoran.http.payload.JsonPayload;
@@ -56,56 +56,44 @@ public class SonoranCad {
 		);
 	}
 
-	public void getAccount(@NotNull String username, @NotNull Consumer<Result<CadAccount>> consumer) {
-		sendRequest(new GetAccountRequest(username), (response) -> {
-			if (response instanceof Response.Error(Exception exception)) {
-				consumer.accept(new Result.Exception<>(exception));
-			}
-			else if (response instanceof Response.Success success) {
-				if (success.statusCode() != 200) {
-					consumer.accept(new Result.Error<>(success.statusCode(), success.body()));
-				} else {
-					consumer.accept(new Result.Success<>(CadAccount.parse(success.jsonBody()), success));
-				}
-			}
+	public @NotNull Result<CadAccount> getAccount(@NotNull String username) {
+		Result<CadAccount> result = new Result<>();
+
+		sendRequest(new GetAccountRequest(username), response -> {
+			result.completeFromJsonResponse(response, json -> CadAccount.parse(json.getAsJsonObject()));
 		});
+
+		return result;
 	}
 
-	public void getServers(@NotNull Consumer<Result<List<CadServer>>> consumer) {
-		sendRequest(new GetServersRequest(), (response -> {
-			if (response instanceof Response.Error(Exception exception)) {
-				consumer.accept(new Result.Exception<>(exception));
-			}
-			else if (response instanceof Response.Success success) {
-				if (success.statusCode() != 200) {
-					consumer.accept(new Result.Error<>(success.statusCode(), success.body()));
-				} else {
-					JsonObject json = success.jsonBody();
-					JsonArray servers = json.get("servers").getAsJsonArray();
-					List<CadServer> list = new ArrayList<>();
-					for (JsonElement server : servers) {
-						CadServer parsed = CadServer.parse(server.getAsJsonObject());
-						list.add(parsed);
-					}
+	public @NotNull Result<String> getVersion() {
+		Result<String> result=  new Result<>();
 
-					consumer.accept(new Result.Success<>(list, success));
-				}
-			}
-		}));
+		sendRequest(new GetVersionRequest(), response -> {
+			result.completeFromStringResponse(response, string -> string);
+		});
+
+		return result;
 	}
 
-	public void getVersion(@NotNull Consumer<Result<String>> consumer) {
-		sendRequest(new GetVersionRequest(), (response -> {
-			if (response instanceof Response.Error(Exception exception)) {
-				consumer.accept(new Result.Exception<>(exception));
-			}
-			else if (response instanceof Response.Success success) {
-				if (success.statusCode() != 200) {
-					consumer.accept(new Result.Error<>(success.statusCode(), success.body()));
-				} else {
-					consumer.accept(new Result.Success<>(success.body(), success));
+	public @NotNull Result<List<CadServer>> getServers() {
+		Result<List<CadServer>> result=  new Result<>();
+
+		sendRequest(new GetServersRequest(), response -> {
+			result.completeFromJsonResponse(response, json -> {
+
+				JsonObject jsonObject = json.getAsJsonObject();
+				JsonArray servers = jsonObject.get("servers").getAsJsonArray();
+				List<CadServer> list = new ArrayList<>();
+				for (JsonElement server : servers) {
+					CadServer parsed = CadServer.parse(server.getAsJsonObject());
+					list.add(parsed);
 				}
-			}
-		}));
+
+				return list;
+			});
+		});
+
+		return result;
 	}
 }
