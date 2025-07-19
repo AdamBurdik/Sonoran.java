@@ -1,3 +1,5 @@
+[![](https://www.jitpack.io/v/adamBurdik/Sonoran.java.svg)](https://www.jitpack.io/#adamBurdik/Sonoran.java)
+
 # Sonoran.java
 Sonoran.java is a library that allows you to interact with the [Sonoran CAD](https://sonorancad.com/) API.
 
