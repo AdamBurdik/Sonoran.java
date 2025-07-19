@@ -14,6 +14,7 @@ import me.adamix.sonoran.http.request.SonoranRequest;
 import me.adamix.sonoran.http.request.general.GetAccountRequest;
 import me.adamix.sonoran.http.request.general.GetServersRequest;
 import me.adamix.sonoran.http.request.general.GetVersionRequest;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -33,7 +34,8 @@ public class SonoranCad {
 		this.communityId = communityId;
 	}
 
-	private void sendRequest(
+	@ApiStatus.Internal
+	public void sendRequest(
 			@NotNull SonoranRequest request,
 			@NotNull Consumer<Response> consumer
 	) {

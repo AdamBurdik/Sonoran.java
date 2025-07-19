@@ -94,13 +94,13 @@ public class Result<T> {
 		}
 	}
 
-	public synchronized void completeFromJsonResponse(@NotNull Response response, @NotNull Function<@NotNull JsonObject, @NotNull T> parser) {
+	public synchronized void completeFromJsonResponse(@NotNull Response response, @NotNull Function<@NotNull JsonElement, @NotNull T> parser) {
 		switch (response) {
 			case Response.Error err -> completeException(err.exception());
 			case Response.Success success when success.statusCode() != 200 ->
 					completeError(new ApiError(success.statusCode(), success.body()));
 			case Response.Success success ->
-					completeSuccess(parser.apply(success.jsonBody().getAsJsonObject()));
+					completeSuccess(parser.apply(success.jsonBody()));
 			default -> throw new IllegalStateException("Unexpected value: " + response);
 		}
 	}
