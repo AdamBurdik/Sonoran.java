@@ -33,28 +33,24 @@ dependencies {
 Sonoran sonoran = Sonoran.builder()
         .withCad("CAD_API_TOKEN_HERE", "CAD_COMMUNITY_ID_HERE")
         .build();
+
+// Shuts down the internal HTTP client and task executor.
+// Call this method during application shutdown to clean up resources.
+sonoran.shutdown();
 ```
 3. Use provided methods
 ```java
-// Prints current sonoran version
-sonoran.cad().getVersion((result) -> {
-    switch (result) {
-        case Result.Success<String> success -> System.out.println("Version: " + success.value());
-        case Result.Error<String> error -> System.out.println(error.message());
-        case Result.Exception<String> exception -> throw new RuntimeException(exception.exception());
-        default -> throw new IllegalStateException("Unexpected value: " + result);
-    }
-});
+// Prints the current Sonoran CAD version
+sonoran.cad().getVersion()
+    .onSuccess(version -> System.out.println("Version: " + version))
+    .onError(error -> System.out.println("API error: " + error.message())) // Use onError to handle unsuccessful API responses
+    .onException(Throwable::printStackTrace); // Use onException to handle unexpected internal errors
 
-// Retrieves CAD Account instance of provided username
-sonoran.cad().getAccount("ACCOUNT_NAME_HERE", (result -> {
-    switch (result) {
-        case Result.Success<CadAccount> success -> System.out.println("Account: " + success.value());
-        case Result.Error<CadAccount> error -> System.out.println(error.message());
-        case Result.Exception<CadAccount> exception -> throw new RuntimeException(exception.exception());
-        default -> throw new IllegalStateException("Unexpected value: " + result);
-    }
-}));
+// Retrieves the CAD Account for the provided username
+sonoran.cad().getAccount("ACCOUNT_NAME_HERE")
+    .onSuccess(account -> System.out.println("Found account: " + account))
+    .onError(error -> System.out.println("API error: " + error.message()))
+    .onException(Throwable::printStackTrace);
 ```
 
 # Contributing
