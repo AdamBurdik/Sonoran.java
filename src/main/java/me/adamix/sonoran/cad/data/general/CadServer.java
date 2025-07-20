@@ -1,5 +1,7 @@
 package me.adamix.sonoran.cad.data.general;
 
+import me.adamix.sonoran.codec.Codec;
+import me.adamix.sonoran.codec.StructCodec;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -18,22 +20,20 @@ public record CadServer(
 		@Nullable String mapType,
 		boolean isStatic
 ) {
-	public static @NotNull CadServer parse(@NotNull com.google.gson.JsonObject json) {
-		return new CadServer(
-				json.get("id").getAsInt(),
-				json.get("name").getAsString(),
-				json.get("description").getAsString(),
-				json.has("signal") && !json.get("signal").isJsonNull() ? json.get("signal").getAsString() : null,
-				json.get("mapUrl").getAsString(),
-				json.has("mapIp") && !json.get("mapIp").isJsonNull() ? json.get("mapIp").getAsString() : null,
-				json.has("mapPort") && !json.get("mapPort").isJsonNull() ? json.get("mapPort").getAsString() : null,
-				json.get("differingOutbound").getAsBoolean(),
-				json.has("outboundIp") && !json.get("outboundIp").isJsonNull() ? json.get("outboundIp").getAsString() : null,
-				json.has("listenerPort") && !json.get("listenerPort").isJsonNull() ? json.get("listenerPort").getAsString() : null,
-				json.get("enableMap").getAsBoolean(),
-				json.has("mapType") && !json.get("mapType").isJsonNull() ? json.get("mapType").getAsString() : null,
-				json.get("isStatic").getAsBoolean()
-		);
-	}
-
+	public static final Codec<CadServer> CODEC = StructCodec.struct(
+			"id", Codec.INT, CadServer::id,
+			"name", Codec.STRING, CadServer::name,
+			"description", Codec.STRING, CadServer::description,
+			"signal", Codec.STRING.optional(), CadServer::signal,
+			"mapUrl", Codec.STRING, CadServer::mapUrl,
+			"mapIp", Codec.STRING.optional(), CadServer::mapIp,
+			"mapPort", Codec.STRING.optional(), CadServer::mapPort,
+			"differingOutbound", Codec.BOOLEAN, CadServer::differingOutbound,
+			"outboundIp", Codec.STRING.optional(), CadServer::outboundIp,
+			"listenerPort", Codec.STRING.optional(), CadServer::listenerPort,
+			"enableMap", Codec.BOOLEAN, CadServer::enableMap,
+			"mapType", Codec.STRING.optional(), CadServer::mapType,
+			"isStatic", Codec.BOOLEAN, CadServer::isStatic,
+			CadServer::new
+	);
 }

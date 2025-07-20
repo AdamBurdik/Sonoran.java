@@ -1,6 +1,7 @@
 package me.adamix.sonoran.cad.data.general;
 
-import com.google.gson.JsonObject;
+import me.adamix.sonoran.codec.Codec;
+import me.adamix.sonoran.codec.StructCodec;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;
@@ -9,10 +10,9 @@ public record CadAccount(
 		@NotNull String username,
 		@NotNull UUID uuid
 ) {
-	public static @NotNull CadAccount parse(@NotNull JsonObject json) {
-		return new CadAccount(
-				json.get("username").getAsString(),
-				UUID.fromString(json.get("uuid").getAsString())
-		);
-	}
+	public static final Codec<CadAccount> CODEC = StructCodec.struct(
+			"username", Codec.STRING, CadAccount::username,
+			"uuid", Codec.UUID, CadAccount::uuid,
+			CadAccount::new
+	);
 }

@@ -65,7 +65,7 @@ public class SonoranCad {
 		Result<CadAccount> result = new Result<>();
 
 		sendRequest(new GetAccountRequest(username), response -> {
-			result.completeFromJsonResponse(response, json -> CadAccount.parse(json.getAsJsonObject()));
+			result.completeFromJsonResponse(response, CadAccount.CODEC::decode);
 		});
 
 		return result;
@@ -91,7 +91,7 @@ public class SonoranCad {
 				JsonArray servers = jsonObject.get("servers").getAsJsonArray();
 				List<CadServer> list = new ArrayList<>();
 				for (JsonElement server : servers) {
-					CadServer parsed = CadServer.parse(server.getAsJsonObject());
+					CadServer parsed = CadServer.CODEC.decode(server);
 					list.add(parsed);
 				}
 
@@ -112,7 +112,7 @@ public class SonoranCad {
 				List<CadCharacter> characterList = new ArrayList<>();
 
 				for (JsonElement characterObject : array) {
-					characterList.add(CadCharacter.parse(characterObject.getAsJsonObject()));
+					characterList.add(CadCharacter.CODEC.decode(characterObject));
 				}
 
 				return characterList;

@@ -1,17 +1,21 @@
 package me.adamix.sonoran.cad.data;
 
-import com.google.gson.JsonObject;
+import me.adamix.sonoran.codec.Codec;
+import me.adamix.sonoran.codec.StructCodec;
 import org.jetbrains.annotations.NotNull;
 
 public record CadCharacter(
+		long recordTypeId,
 		long id,
-		@NotNull String name
+		@NotNull String name,
+		long type
 ) {
-	public static @NotNull CadCharacter parse(@NotNull JsonObject json) {
-		// ToDO Implement parsing logic for everything    :((
-		long id = json.get("id").getAsLong();
-		String name = json.get("name").getAsString();
-
-		return new CadCharacter(id, name);
-	}
+	// ToDO Add fields for everything
+	public static final Codec<CadCharacter> CODEC = StructCodec.struct(
+			"recordTypeId", Codec.LONG, CadCharacter::recordTypeId,
+			"id", Codec.LONG, CadCharacter::id,
+			"name", Codec.STRING, CadCharacter::name,
+			"type", Codec.LONG, CadCharacter::type,
+			CadCharacter::new
+	);
 }
