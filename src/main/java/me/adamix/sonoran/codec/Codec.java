@@ -1,11 +1,10 @@
 package me.adamix.sonoran.codec;
 
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.UUID;
-import java.util.function.Function;
 
 public interface Codec<T> {
 	Codec<String> STRING = CodecImpl.STRING;
@@ -29,5 +28,9 @@ public interface Codec<T> {
 
 	default @NotNull Codec<T> optional(@NotNull T defaultValue) {
 		return new CodecImpl.OptionalCodec<>(this, defaultValue);
+	}
+
+	default @NotNull Codec<List<T>> list() {
+		return new CodecImpl.ListCodec<>(this);
 	}
 }
