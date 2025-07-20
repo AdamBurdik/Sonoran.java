@@ -37,6 +37,12 @@ public class SonoranCad {
 		this.communityId = communityId;
 	}
 
+	/**
+	 * Queues a request to be sent asynchronously.
+	 *
+	 * @param request the request to send.
+	 * @param consumer the callback to handle the response after the request is sent.
+	 */
 	@ApiStatus.Internal
 	public void sendRequest(
 			@NotNull SonoranRequest request,
@@ -61,6 +67,11 @@ public class SonoranCad {
 		);
 	}
 
+	/**
+	 * Creates and queues a request to fetch an account by username.
+	 * @param username the username to fetch the account for
+	 * @return a {@link Result} that will be completed when the response is received
+	 */
 	public @NotNull Result<CadAccount> getAccount(@NotNull String username) {
 		Result<CadAccount> result = new Result<>();
 
@@ -71,6 +82,10 @@ public class SonoranCad {
 		return result;
 	}
 
+	/**
+	 * Creates and queues a request to fetch current version of sonoran CAD.
+	 * @return a {@link Result} that will be completed when the response is received
+	 */
 	public @NotNull Result<String> getVersion() {
 		Result<String> result = new Result<>();
 
@@ -81,6 +96,10 @@ public class SonoranCad {
 		return result;
 	}
 
+	/**
+	 * Creates and queues a request to fetch all servers of the current community.
+	 * @return a {@link Result} that will be completed when the response is received.
+	 */
 	public @NotNull Result<List<CadServer>> getServers() {
 		Result<List<CadServer>> result = new Result<>();
 
@@ -102,10 +121,15 @@ public class SonoranCad {
 		return result;
 	}
 
-	public @NotNull Result<List<CadCharacter>> getCharacters(@NotNull UUID acountUuid) {
+	/**
+	 * Creates and queues a request to fetch all characters of specified account.
+	 * @param accountUuid the UUID of the account to fetch characters for.
+	 * @return a {@link Result} that will be completed when the response is received.
+	 */
+	public @NotNull Result<List<CadCharacter>> getCharacters(@NotNull UUID accountUuid) {
 		Result<List<CadCharacter>> result = new Result<>();
 
-		sendRequest(new GetCharactersRequest(acountUuid), response -> {
+		sendRequest(new GetCharactersRequest(accountUuid), response -> {
 			result.completeFromJsonResponse(response, json -> {
 				JsonArray array = json.getAsJsonArray();
 
