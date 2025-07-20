@@ -1,16 +1,19 @@
 plugins {
     id("java")
+    id("java-library")
     id("com.gradleup.shadow") version "8.3.0"
 }
 
 group = "me.adamix.sonoran"
-version = "1.1.0"
+version = "1.1.1"
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    api("org.slf4j:slf4j-api:2.0.9")
+
     implementation("com.google.code.gson:gson:2.13.1")
     implementation("org.apache.httpcomponents.client5:httpclient5:5.5")
 
