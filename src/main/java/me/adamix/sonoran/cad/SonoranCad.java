@@ -13,7 +13,8 @@ import me.adamix.sonoran.http.handler.response.Response;
 import me.adamix.sonoran.http.payload.JsonPayload;
 import me.adamix.sonoran.http.request.SonoranRequest;
 import me.adamix.sonoran.http.request.civilian.GetCharactersRequest;
-import me.adamix.sonoran.http.request.general.GetAccountRequest;
+import me.adamix.sonoran.http.request.general.GetAccountByAPIIdRequest;
+import me.adamix.sonoran.http.request.general.GetAccountByUsernameRequest;
 import me.adamix.sonoran.http.request.general.GetServersRequest;
 import me.adamix.sonoran.http.request.general.GetVersionRequest;
 import org.jetbrains.annotations.ApiStatus;
@@ -72,10 +73,20 @@ public class SonoranCad {
 	 * @param username the username to fetch the account for
 	 * @return a {@link Result} that will be completed when the response is received
 	 */
-	public @NotNull Result<CadAccount> getAccount(@NotNull String username) {
+	public @NotNull Result<CadAccount> getAccountByUsername(@NotNull String username) {
 		Result<CadAccount> result = new Result<>();
 
-		sendRequest(new GetAccountRequest(username), response -> {
+		sendRequest(new GetAccountByUsernameRequest(username), response -> {
+			result.completeFromJsonResponse(response, CadAccount.CODEC::decode);
+		});
+
+		return result;
+	}
+
+	public @NotNull Result<CadAccount> getAccountByAPIId(@NotNull String apiId) {
+		Result<CadAccount> result = new Result<>();
+
+		sendRequest(new GetAccountByAPIIdRequest(apiId), response -> {
 			result.completeFromJsonResponse(response, CadAccount.CODEC::decode);
 		});
 

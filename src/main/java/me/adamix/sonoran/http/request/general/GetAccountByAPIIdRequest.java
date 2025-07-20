@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 import java.util.Map;
 
-public record GetAccountRequest(@NotNull String username) implements SonoranRequest {
+public record GetAccountByAPIIdRequest(@NotNull String apiId) implements SonoranRequest {
 	@Override
 	public @NotNull String url() {
 		return "https://api.sonorancad.com/general/get_account";
@@ -19,6 +19,7 @@ public record GetAccountRequest(@NotNull String username) implements SonoranRequ
 
 	@Override
 	public List<Object> data() {
-		return List.of(Map.of("username", username));
+		return List.of(Map.of("apiId", apiId));
 	}
 }
+
