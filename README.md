@@ -63,6 +63,6 @@ If you have suggestions, ideas, or issues, feel free to open an issue or contact
 # Credits
 [Sonoran CAD Docs](https://docs.sonoransoftware.com/cad/api-integration/) - Documentation for Sonoran CAD API
 
-[sonoran.js](https://github.com/Sonoran-Software/Sonoran.js/tree/master/src) - Initial idea to create a library for java
+[sonoran.js](https://github.com/Sonoran-Software/Sonoran.js) - Initial idea to create a library for java
 
 [minestom](https://github.com/Minestom/Minestom/) - Codec design
