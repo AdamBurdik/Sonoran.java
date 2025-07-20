@@ -59,3 +59,10 @@ sonoran.cad().getAccount("ACCOUNT_NAME_HERE")
 Contributions are welcome!
 
 If you have suggestions, ideas, or issues, feel free to open an issue or contact me on discord: @adamix.dev.
+
+# Credits
+[Sonoran CAD Docs](https://docs.sonoransoftware.com/cad/api-integration/) - Documentation for Sonoran CAD API
+
+[sonoran.js](https://github.com/Sonoran-Software/Sonoran.js/tree/master/src) - Initial idea to create a library for java
+
+[minestom](https://github.com/Minestom/Minestom/) - Codec design
