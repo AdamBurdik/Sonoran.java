@@ -30,7 +30,7 @@ public record CadCharacter(
 			CadCharacter::new
 	);
 
-	record Section(
+	public record Section(
 			int category,
 			@NotNull String label,
 			@NotNull List<Field> fields,
@@ -52,7 +52,7 @@ public record CadCharacter(
 				Section::new
 		);
 
-		record Field(
+		public record Field(
 				@NotNull String type,
 				@NotNull String label,
 				@NotNull String value,
@@ -90,7 +90,7 @@ public record CadCharacter(
 			);
 		}
 
-		record Dependency(
+		public record Dependency(
 				@Nullable String type,
 				@Nullable String fid,
 				@Nullable List<String> acceptableValues
