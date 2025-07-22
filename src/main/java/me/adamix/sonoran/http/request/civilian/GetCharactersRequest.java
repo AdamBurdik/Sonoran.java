@@ -7,19 +7,45 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-public record GetCharactersRequest(@NotNull UUID cadAccountUuid) implements SonoranRequest {
+public interface GetCharactersRequest extends SonoranRequest {
+	static @NotNull GetCharactersRequest byCadAccountUuid(@NotNull UUID cadAccountUuid) {
+		return new ByAccountUuid(cadAccountUuid);
+	}
+
+	static @NotNull GetCharactersRequest byApiId(@NotNull String apiId) {
+		return new ByApiId(apiId);
+	}
+
+	@NotNull Map<String, Object> getData();
+
 	@Override
-	public @NotNull String url() {
+	default @NotNull String url() {
 		return "https://api.sonorancad.com/civilian/get_characters";
 	}
 
 	@Override
-	public @NotNull String type() {
+	default @NotNull String type() {
 		return "GET_CHARACTERS";
 	}
 
 	@Override
-	public List<Object> data() {
-		return List.of(Map.of("account", cadAccountUuid));
+	default List<Object> data() {
+		return List.of(getData());
+	}
+
+	record ByAccountUuid(@NotNull UUID cadAccountUuid) implements GetCharactersRequest {
+
+		@Override
+		public @NotNull Map<String, Object> getData() {
+			return Map.of("account", cadAccountUuid);
+		}
+	}
+
+	record ByApiId(@NotNull String apiId) implements GetCharactersRequest {
+
+		@Override
+		public @NotNull Map<String, Object> getData() {
+			return Map.of("apiId", apiId);
+		}
 	}
 }

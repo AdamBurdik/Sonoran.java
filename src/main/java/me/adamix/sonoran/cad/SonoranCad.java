@@ -140,7 +140,32 @@ public class SonoranCad {
 	public @NotNull Result<List<CadCharacter>> getCharacters(@NotNull UUID accountUuid) {
 		Result<List<CadCharacter>> result = new Result<>();
 
-		sendRequest(new GetCharactersRequest(accountUuid), response -> {
+		sendRequest(GetCharactersRequest.byCadAccountUuid(accountUuid), response -> {
+			result.completeFromJsonResponse(response, json -> {
+				JsonArray array = json.getAsJsonArray();
+
+				List<CadCharacter> characterList = new ArrayList<>();
+
+				for (JsonElement characterObject : array) {
+					characterList.add(CadCharacter.CODEC.decode(characterObject));
+				}
+
+				return characterList;
+			});
+		});
+
+		return result;
+	}
+
+	/**
+	 * Creates and queues a request to fetch all characters of specified account.
+	 * @param apiId the api ID of the account to fetch characters for.
+	 * @return a {@link Result} that will be completed when the response is received.
+	 */
+	public @NotNull Result<List<CadCharacter>> getCharacters(@NotNull String apiId) {
+		Result<List<CadCharacter>> result = new Result<>();
+
+		sendRequest(GetCharactersRequest.byApiId(apiId), response -> {
 			result.completeFromJsonResponse(response, json -> {
 				JsonArray array = json.getAsJsonArray();
 
