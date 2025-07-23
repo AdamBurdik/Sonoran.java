@@ -12,6 +12,7 @@ import me.adamix.sonoran.cad.data.general.CadServer;
 import me.adamix.sonoran.http.handler.response.Response;
 import me.adamix.sonoran.http.payload.JsonPayload;
 import me.adamix.sonoran.http.request.SonoranRequest;
+import me.adamix.sonoran.http.request.civilian.EditCharacterRequest;
 import me.adamix.sonoran.http.request.civilian.GetCharactersRequest;
 import me.adamix.sonoran.http.request.general.GetAccountByAPIIdRequest;
 import me.adamix.sonoran.http.request.general.GetAccountByUsernameRequest;
@@ -19,6 +20,7 @@ import me.adamix.sonoran.http.request.general.GetServersRequest;
 import me.adamix.sonoran.http.request.general.GetVersionRequest;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -177,6 +179,40 @@ public class SonoranCad {
 
 				return characterList;
 			});
+		});
+
+		return result;
+	}
+
+	public @NotNull Result<String> editCharacter(
+			@NotNull UUID accountUuid,
+			int templateId,
+			boolean useDictionary,
+			long recordId,
+			@Nullable Map<String, Object> replaceValues,
+			@Nullable JsonElement json
+	) {
+		Result<String> result = new Result<>();
+
+		sendRequest(EditCharacterRequest.byCadAccountUuid(accountUuid, templateId, useDictionary, recordId, replaceValues, json), response -> {
+			result.completeFromStringResponse(response, string -> string);
+		});
+
+		return result;
+	}
+
+	public @NotNull Result<String> editCharacter(
+			@NotNull String apiId,
+			int templateId,
+			boolean useDictionary,
+			long recordId,
+			@Nullable Map<String, Object> replaceValues,
+			@Nullable JsonElement json
+	) {
+		Result<String> result = new Result<>();
+
+		sendRequest(EditCharacterRequest.byApiId(apiId, templateId, useDictionary, recordId, replaceValues, json), response -> {
+			result.completeFromStringResponse(response, string -> string);
 		});
 
 		return result;
