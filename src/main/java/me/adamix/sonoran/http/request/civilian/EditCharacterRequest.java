@@ -47,12 +47,12 @@ public interface EditCharacterRequest extends SonoranRequest {
 	@Override
 	default List<Object> data() {
 		return List.of(
-				"user", user(),
-				"templateId", templateId(),
-				"useDictionary", useDictionary(),
-				"recordId", recordId(),
-				"replaceValues", replaceValues() != null ? replaceValues() : JsonNull.INSTANCE.toString(),
-				"record", json() != null ? json().toString() : JsonNull.INSTANCE.toString()
+				Map.of("user", user()),
+				Map.of("templateId", templateId()),
+				Map.of("useDictionary", useDictionary()),
+				Map.of("recordId", recordId()),
+				Map.of("replaceValues", replaceValues() != null ? replaceValues() : JsonNull.INSTANCE.toString()),
+				Map.of("record", json() != null ? json().toString() : JsonNull.INSTANCE.toString())
 		);
 	}
 
