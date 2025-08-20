@@ -29,6 +29,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class SonoranCad {
+	public static @NotNull String API_URL = "https://api.sonorancad.com/";
 	private static final Gson gson = new Gson();
 	private final @NotNull Sonoran sonoran;
 	private final @NotNull String apiToken;

@@ -2,6 +2,7 @@ package me.adamix.sonoran.http.request.civilian;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
+import me.adamix.sonoran.cad.SonoranCad;
 import me.adamix.sonoran.http.request.SonoranRequest;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -36,7 +37,7 @@ public interface EditCharacterRequest extends SonoranRequest {
 
 	@Override
 	default @NotNull String url() {
-		return "https://api.sonorancad.com/civilian/edit_character";
+		return SonoranCad.API_URL + "civilian/edit_character";
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package me.adamix.sonoran.http.request.civilian;
 
+import me.adamix.sonoran.cad.SonoranCad;
 import me.adamix.sonoran.http.request.SonoranRequest;
 import org.jetbrains.annotations.NotNull;
 
@@ -20,7 +21,7 @@ public interface GetCharactersRequest extends SonoranRequest {
 
 	@Override
 	default @NotNull String url() {
-		return "https://api.sonorancad.com/civilian/get_characters";
+		return SonoranCad.API_URL + "civilian/get_characters";
 	}
 
 	@Override
