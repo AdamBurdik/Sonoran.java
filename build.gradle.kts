@@ -16,6 +16,7 @@ dependencies {
 
     implementation("com.google.code.gson:gson:2.13.1")
     implementation("org.apache.httpcomponents.client5:httpclient5:5.5")
+    implementation("com.google.guava:guava:33.5.0-jre")
 
     implementation("org.jetbrains:annotations:26.0.2")
 }

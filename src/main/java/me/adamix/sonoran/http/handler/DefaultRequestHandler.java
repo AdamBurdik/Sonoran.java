@@ -1,5 +1,7 @@
 package me.adamix.sonoran.http.handler;
 
+import com.google.common.util.concurrent.RateLimiter;
+import me.adamix.sonoran.cad.SonoranCad;
 import me.adamix.sonoran.http.handler.response.Response;
 import me.adamix.sonoran.http.payload.Payload;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
@@ -14,7 +16,7 @@ import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Consumer;
 
@@ -22,15 +24,18 @@ public class DefaultRequestHandler implements RequestHandler {
 	private final AtomicBoolean isProcessing = new AtomicBoolean(false);
 	private final AtomicBoolean scheduledShutdown = new AtomicBoolean(false);
 	private final CloseableHttpClient httpClient;
-	private final BlockingQueue<Task> queue = new LinkedBlockingQueue<>();
+	private final LinkedBlockingDeque<Task> queue = new LinkedBlockingDeque<>();
 	private final ExecutorService executor = Executors.newSingleThreadExecutor();
 
-	public DefaultRequestHandler(@NotNull CloseableHttpClient httpClient) {
+	private final RateLimiter rateLimiter;
+
+	public DefaultRequestHandler(@NotNull CloseableHttpClient httpClient, @NotNull RateLimiter rateLimiter) {
 		this.httpClient = httpClient;
+		this.rateLimiter = rateLimiter;
 	}
 
 	public DefaultRequestHandler() {
-		this(HttpClients.createDefault());
+		this(HttpClients.createDefault(), RateLimiter.create(SonoranCad.permitsPerSecond));
 	}
 
 	@Override
@@ -45,7 +50,7 @@ public class DefaultRequestHandler implements RequestHandler {
 
 	@Override
 	public void scheduleRequest(@NotNull String url, @NotNull Payload payload, @NotNull Map<String, Object> headers, @NotNull Consumer<Response> consumer) {
-		queue.add(new Task(url, payload, headers, consumer));
+		queue.addLast(new Task(url, payload, headers, consumer));
 		if (!isProcessing.get()) {
 			startProcessing();
 		}
@@ -80,7 +85,16 @@ public class DefaultRequestHandler implements RequestHandler {
 					break;
 				}
 
+				rateLimiter.acquire();
+
 				Response response = sendPostRequest(task.url, task.payload, task.headers);
+				if (response instanceof Response.Success success) {
+					if (success.statusCode() == 429) {
+						queue.addFirst(task);
+						rateLimiter.acquire((int) (SonoranCad.permitsPerSecond * 2));
+					}
+				}
+
 				task.consumer.accept(response);
 			}
 			isProcessing.set(false);
