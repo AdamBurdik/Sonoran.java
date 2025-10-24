@@ -30,7 +30,7 @@ import java.util.function.Consumer;
 
 public class SonoranCad {
 	public static @NotNull String API_URL = "https://api.sonorancad.com/";
-	public static double permitsPerSecond = 1.0 / 2.0;
+	public static double PERMITS_PER_SECOND = 1.0 / 2.0;
 
 	private static final Gson gson = new Gson();
 	private final @NotNull Sonoran sonoran;
