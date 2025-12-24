@@ -17,6 +17,7 @@ import me.adamix.sonoran.http.request.general.GetAccountByAPIIdRequest;
 import me.adamix.sonoran.http.request.general.GetAccountByUsernameRequest;
 import me.adamix.sonoran.http.request.general.GetServersRequest;
 import me.adamix.sonoran.http.request.general.GetVersionRequest;
+import me.adamix.sonoran.http.request.general.record.CreateRecordProvider;
 import me.adamix.sonoran.http.request.general.record.EditRecordProvider;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -255,4 +256,37 @@ public class SonoranCad {
 		return result;
 	}
 
+	public @NotNull Result<String> createCustomRecord(
+			@NotNull UUID accountUuid,
+			int templateId,
+			boolean useDictionary,
+			long recordId,
+			@Nullable Map<String, Object> replaceValues,
+			@Nullable JsonElement json
+	) {
+		Result<String> result = new Result<>();
+
+		sendRequest(CreateRecordProvider.CUSTOM_RECORD.byAccountUuid(accountUuid, templateId, useDictionary, recordId, replaceValues, json), response -> {
+			result.completeFromStringResponse(response, string -> string);
+		});
+
+		return result;
+	}
+
+	public @NotNull Result<String> createCustomRecord(
+			@NotNull String apiId,
+			int templateId,
+			boolean useDictionary,
+			long recordId,
+			@Nullable Map<String, Object> replaceValues,
+			@Nullable JsonElement json
+	) {
+		Result<String> result = new Result<>();
+
+		sendRequest(CreateRecordProvider.CUSTOM_RECORD.byApiId(apiId, templateId, useDictionary, recordId, replaceValues, json), response -> {
+			result.completeFromStringResponse(response, string -> string);
+		});
+
+		return result;
+	}
 }
