@@ -12,7 +12,8 @@ import me.adamix.sonoran.cad.data.general.CadServer;
 import me.adamix.sonoran.http.handler.response.Response;
 import me.adamix.sonoran.http.payload.JsonPayload;
 import me.adamix.sonoran.http.request.SonoranRequest;
-import me.adamix.sonoran.http.request.civilian.EditCharacterRequest;
+import me.adamix.sonoran.http.request.civilian.EditRecordProvider;
+import me.adamix.sonoran.http.request.civilian.EditRecordRequest;
 import me.adamix.sonoran.http.request.civilian.GetCharactersRequest;
 import me.adamix.sonoran.http.request.general.GetAccountByAPIIdRequest;
 import me.adamix.sonoran.http.request.general.GetAccountByUsernameRequest;
@@ -197,7 +198,7 @@ public class SonoranCad {
 	) {
 		Result<String> result = new Result<>();
 
-		sendRequest(EditCharacterRequest.byCadAccountUuid(accountUuid, templateId, useDictionary, recordId, replaceValues, json), response -> {
+		sendRequest(EditRecordProvider.CHARACTER.byAccountUuid(accountUuid, templateId, useDictionary, recordId, replaceValues, json), response -> {
 			result.completeFromStringResponse(response, string -> string);
 		});
 
@@ -214,10 +215,45 @@ public class SonoranCad {
 	) {
 		Result<String> result = new Result<>();
 
-		sendRequest(EditCharacterRequest.byApiId(apiId, templateId, useDictionary, recordId, replaceValues, json), response -> {
+		sendRequest(EditRecordProvider.CHARACTER.byApiId(apiId, templateId, useDictionary, recordId, replaceValues, json), response -> {
 			result.completeFromStringResponse(response, string -> string);
 		});
 
 		return result;
 	}
+
+	public @NotNull Result<String> editCustomRecord(
+			@NotNull UUID accountUuid,
+			int templateId,
+			boolean useDictionary,
+			long recordId,
+			@Nullable Map<String, Object> replaceValues,
+			@Nullable JsonElement json
+	) {
+		Result<String> result = new Result<>();
+
+		sendRequest(EditRecordProvider.CUSTOM_RECORD.byAccountUuid(accountUuid, templateId, useDictionary, recordId, replaceValues, json), response -> {
+			result.completeFromStringResponse(response, string -> string);
+		});
+
+		return result;
+	}
+
+	public @NotNull Result<String> editCustomRecord(
+			@NotNull String apiId,
+			int templateId,
+			boolean useDictionary,
+			long recordId,
+			@Nullable Map<String, Object> replaceValues,
+			@Nullable JsonElement json
+	) {
+		Result<String> result = new Result<>();
+
+		sendRequest(EditRecordProvider.CUSTOM_RECORD.byApiId(apiId, templateId, useDictionary, recordId, replaceValues, json), response -> {
+			result.completeFromStringResponse(response, string -> string);
+		});
+
+		return result;
+	}
+
 }

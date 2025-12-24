@@ -5,7 +5,7 @@ plugins {
 }
 
 group = "me.adamix.sonoran"
-version = "1.6.3"
+version = "1.6.4"
 
 repositories {
     mavenCentral()
