@@ -7,8 +7,8 @@ import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.jetbrains.annotations.NotNull;
 
 public record JsonPayload(@NotNull JsonObject jsonObject) implements Payload {
-	@Override
-	public @NotNull HttpEntity getEntity() {
-		return new StringEntity(jsonObject.toString(), ContentType.APPLICATION_JSON);
-	}
+    @Override
+    public @NotNull HttpEntity getEntity() {
+        return new StringEntity(jsonObject.toString(), ContentType.APPLICATION_JSON);
+    }
 }

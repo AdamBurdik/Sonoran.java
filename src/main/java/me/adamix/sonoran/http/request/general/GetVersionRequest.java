@@ -7,18 +7,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class GetVersionRequest implements SonoranRequest {
-	@Override
-	public @NotNull String url() {
-		return SonoranCad.API_URL + "general/get_version";
-	}
+    @Override
+    public @NotNull String url() {
+        return SonoranCad.API_URL + "general/get_version";
+    }
 
-	@Override
-	public @NotNull String type() {
-		return "GET_VERSION";
-	}
+    @Override
+    public @NotNull String type() {
+        return "GET_VERSION";
+    }
 
-	@Override
-	public List<Object> data() {
-		return List.of();
-	}
+    @Override
+    public List<Object> data() {
+        return List.of();
+    }
 }

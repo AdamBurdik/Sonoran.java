@@ -7,18 +7,18 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class GetServersRequest implements SonoranRequest {
-	@Override
-	public @NotNull String url() {
-		return SonoranCad.API_URL + "general/get_servers";
-	}
+    @Override
+    public @NotNull String url() {
+        return SonoranCad.API_URL + "general/get_servers";
+    }
 
-	@Override
-	public @NotNull String type() {
-		return "GET_SERVERS";
-	}
+    @Override
+    public @NotNull String type() {
+        return "GET_SERVERS";
+    }
 
-	@Override
-	public List<Object> data() {
-		return List.of();
-	}
+    @Override
+    public List<Object> data() {
+        return List.of();
+    }
 }
