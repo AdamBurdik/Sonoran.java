@@ -1,17 +1,24 @@
-package me.adamix.sonoran.http.request.general.record;
+package me.adamix.sonoran.http.request.general.record.edit;
 
 import com.google.gson.JsonElement;
+import me.adamix.sonoran.cad.SonoranCad;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Map;
 import java.util.UUID;
 
-public interface GenericRecordProvider {
-    static @NotNull GenericRecordProvider create(@NotNull String url, @NotNull String type) {
-        return new GenericRecordProvider() {
+public interface EditRecordProvider {
+    // https://docs.sonoransoftware.com/cad/api-integration/api-endpoints/civilian/edit-character
+    EditRecordProvider CHARACTER = create(SonoranCad.API_URL + "civilian/edit_character", "EDIT_CHARACTER");
+
+    // https://docs.sonoransoftware.com/cad/api-integration/api-endpoints/general/custom-records/edit-record
+    EditRecordProvider CUSTOM_RECORD = create(SonoranCad.API_URL + "general/edit_record", "EDIT_RECORD");
+
+    static @NotNull EditRecordProvider create(@NotNull String url, @NotNull String type) {
+        return new EditRecordProvider() {
             @Override
-            public @NotNull GenericRecordRequest byApiId(
+            public @NotNull EditRecordRequest byApiId(
                     @NotNull String apiId,
                     int templateId,
                     boolean useDictionary,
@@ -23,7 +30,7 @@ public interface GenericRecordProvider {
             }
 
             @Override
-            public @NotNull GenericRecordRequest byAccountUuid(
+            public @NotNull EditRecordRequest byAccountUuid(
                     @NotNull UUID cadAccountUuid,
                     int templateId,
                     boolean useDictionary,
@@ -36,7 +43,7 @@ public interface GenericRecordProvider {
         };
     }
 
-    @NotNull GenericRecordRequest byApiId(
+    @NotNull EditRecordRequest byApiId(
             @NotNull String apiId,
             int templateId,
             boolean useDictionary,
@@ -45,7 +52,7 @@ public interface GenericRecordProvider {
             @Nullable JsonElement json
     );
 
-    @NotNull GenericRecordRequest byAccountUuid(
+    @NotNull EditRecordRequest byAccountUuid(
             @NotNull UUID cadAccountUuid,
             int templateId,
             boolean useDictionary,
@@ -63,7 +70,7 @@ public interface GenericRecordProvider {
             long recordId,
             Map<String, Object> replaceValues,
             @Nullable JsonElement json
-    ) implements GenericRecordRequest {
+    ) implements EditRecordRequest {
         @Override
         public @NotNull String user() {
             return cadAccountUuid.toString();
@@ -79,7 +86,7 @@ public interface GenericRecordProvider {
             long recordId,
             Map<String, Object> replaceValues,
             @Nullable JsonElement json
-    ) implements GenericRecordRequest {
+    ) implements EditRecordRequest {
         @Override
         public @NotNull String user() {
             return apiId;

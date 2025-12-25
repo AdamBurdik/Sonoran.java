@@ -1,4 +1,4 @@
-package me.adamix.sonoran.http.request.general.record;
+package me.adamix.sonoran.http.request.general.record.edit;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
@@ -9,7 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 
-public interface GenericRecordRequest extends SonoranRequest {
+public interface EditRecordRequest extends SonoranRequest {
     @Override
     default List<Object> data() {
         return List.of(
