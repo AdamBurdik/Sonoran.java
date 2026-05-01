@@ -1,6 +1,7 @@
 package me.adamix.sonoran.http.annotation;
 
 import me.adamix.sonoran.cad.request.civilian.GetCharactersRequest;
+import me.adamix.sonoran.cad.request.general.GetAccountRequest;
 import me.adamix.sonoran.cad.request.general.GetVersionRequest;
 import me.adamix.sonoran.http.Method;
 import me.adamix.sonoran.http.SonoranRequest;
@@ -17,7 +18,8 @@ import java.util.Map;
 public class Methods {
     public static final SonoranRequest
             GET_VERSION = create(GetVersionRequest.class),
-            GET_CHARACTERS = createGet(GetCharactersRequest.class);
+            GET_CHARACTERS = createGet(GetCharactersRequest.class),
+            GET_ACCOUNT = createGet(GetAccountRequest.class);
 
 
     private static SonoranRequest create(@NotNull Class<?> clazz) {

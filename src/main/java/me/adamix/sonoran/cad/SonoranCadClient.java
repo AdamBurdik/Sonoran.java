@@ -1,6 +1,7 @@
 package me.adamix.sonoran.cad;
 
 import lombok.Builder;
+import me.adamix.sonoran.cad.data.CADAccount;
 import me.adamix.sonoran.cad.data.CADCharacter;
 import me.adamix.sonoran.cad.request.general.GetVersionResponse;
 import me.adamix.sonoran.http.SonoranHttpService;
@@ -12,6 +13,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 @Builder(builderClassName = "Builder")
@@ -53,9 +55,34 @@ public class SonoranCadClient {
         return requestService.sendRequest(Methods.GET_VERSION, Params.empty(), GetVersionResponse.CODEC);
     }
 
-    public @NotNull CompletableFuture<List<CADCharacter>> getCharacters(@NotNull String communityUserId) {
+    public @NotNull CompletableFuture<List<CADCharacter>> getCharactersByCommunityId(@NotNull String communityUserId) {
         return requestService.sendRequest(Methods.GET_CHARACTERS, Params.of("communityUserId", communityUserId), CADCharacter.CODEC.list());
     }
+
+    public @NotNull CompletableFuture<List<CADCharacter>> geCharactersByRoblox(@NotNull String roblox) {
+        return requestService.sendRequest(Methods.GET_CHARACTERS, Params.of("roblox", roblox), CADCharacter.CODEC.list());
+    }
+
+    public @NotNull CompletableFuture<List<CADCharacter>> geCharactersByAccountUuid(@NotNull UUID accountUuid) {
+        return requestService.sendRequest(Methods.GET_CHARACTERS, Params.of("accountUuid", accountUuid), CADCharacter.CODEC.list());
+    }
+
+    public @NotNull CompletableFuture<CADAccount> getAccountByUsername(@NotNull String username) {
+        return requestService.sendRequest(Methods.GET_ACCOUNT, Params.of("username", username), CADAccount.CODEC);
+    }
+
+    public @NotNull CompletableFuture<CADAccount> getAccountByRoblox(@NotNull String robloxId) {
+        return requestService.sendRequest(Methods.GET_ACCOUNT, Params.of("roblox", robloxId), CADAccount.CODEC);
+    }
+
+    public @NotNull CompletableFuture<CADAccount> getAccountByUuid(@NotNull UUID uuid) {
+        return requestService.sendRequest(Methods.GET_ACCOUNT, Params.of("accountUuid", uuid), CADAccount.CODEC);
+    }
+
+    public @NotNull CompletableFuture<CADAccount> getAccountByCommunityId(@NotNull String communityUserId) {
+        return requestService.sendRequest(Methods.GET_ACCOUNT, Params.of("communityUserId", communityUserId), CADAccount.CODEC);
+    }
+
 //
 //    public @NotNull CompletableFuture<HeartBeatResponse> heartbeat(int serverId) {
 //        return requestService.sendRequest(new HeartBeatRequest(serverId), HeartBeatResponse.CODEC);
