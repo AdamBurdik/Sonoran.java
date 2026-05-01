@@ -6,6 +6,7 @@ import me.adamix.sonoran.cad.request.general.GetVersionRequest;
 import me.adamix.sonoran.http.Method;
 import me.adamix.sonoran.http.SonoranRequest;
 import me.adamix.sonoran.http.param.ParamDefinition;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 
@@ -22,7 +23,8 @@ public class Methods {
             GET_ACCOUNT = createGet(GetAccountRequest.class);
 
 
-    private static SonoranRequest create(@NotNull Class<?> clazz) {
+    @ApiStatus.Internal
+    public static SonoranRequest create(@NotNull Class<?> clazz) {
         if (clazz.isAnnotationPresent(GetMethod.class)) {
             return createGet(clazz);
         } else if (clazz.isAnnotationPresent(PostMethod.class)) {
@@ -32,13 +34,15 @@ public class Methods {
         }
     }
 
-    private static SonoranRequest createGet(@NotNull Class<?> clazz) {
+    @ApiStatus.Internal
+    public static SonoranRequest createGet(@NotNull Class<?> clazz) {
         GetMethod annotation = clazz.getAnnotation(GetMethod.class);
 
         return sonoranRequest(clazz, annotation.url(), annotation.headers(), annotation.rateLimit());
     }
 
-    private static @NonNull SonoranRequest sonoranRequest(
+    @ApiStatus.Internal
+    public static @NonNull SonoranRequest sonoranRequest(
             @NotNull Class<?> clazz,
             String url,
             String[] headerArray,

@@ -1,14 +1,17 @@
 package me.adamix.sonoran.cad;
 
+import alpine.json.codec.Codec;
 import lombok.Builder;
 import me.adamix.sonoran.cad.data.CADAccount;
 import me.adamix.sonoran.cad.data.CADCharacter;
 import me.adamix.sonoran.cad.request.general.GetVersionResponse;
 import me.adamix.sonoran.http.SonoranHttpService;
+import me.adamix.sonoran.http.SonoranRequest;
 import me.adamix.sonoran.http.SonoranRequestService;
 import me.adamix.sonoran.http.annotation.Methods;
 import me.adamix.sonoran.http.param.Params;
 import me.adamix.sonoran.SonoranURL;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -49,6 +52,15 @@ public class SonoranCadClient {
             }
             return new SonoranCadClient(requestService, apiKey, communityId, baseUrl);
         }
+    }
+
+    @ApiStatus.Internal
+    public <T> @NotNull CompletableFuture<T> sendRequest(
+            @NotNull SonoranRequest request,
+            @NotNull Params params,
+            @NotNull Codec<T> codec
+    ) {
+        return requestService.sendRequest(request, params, codec);
     }
 
     public @NotNull CompletableFuture<GetVersionResponse> getVersion() {
