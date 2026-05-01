@@ -8,7 +8,7 @@ v2 branch is rewrite of library logic and implementation of [sonoran v2 api](htt
 
 New api provides actual http methods and rate limit info. So it should be used instead the legacy one.
 
-> [!INFO]
+> [!NOTE]
 > This library is a work in progress — many endpoints are not yet implemented.  
 > I plan to support all major Sonoran CAD API endpoints in future updates. 
 
