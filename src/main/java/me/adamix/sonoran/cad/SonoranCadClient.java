@@ -4,6 +4,7 @@ import alpine.json.codec.Codec;
 import lombok.Builder;
 import me.adamix.sonoran.cad.data.CADAccount;
 import me.adamix.sonoran.cad.data.CADCharacter;
+import me.adamix.sonoran.cad.request.general.accounts.CreateCommunityLinkResponse;
 import me.adamix.sonoran.cad.request.general.accounts.GetAccountsRequest;
 import me.adamix.sonoran.cad.request.general.accounts.GetAccountsResponse;
 import me.adamix.sonoran.cad.request.general.configuration.GetVersionResponse;
@@ -43,7 +44,8 @@ public class SonoranCadClient {
                     baseUrl,
                     Map.of(
                             "Authorization", "Bearer %s".formatted(apiKey),
-                            "Accept", "application/json"
+                            "Accept", "application/json",
+                            "Content-Type", "application/json"
                     )
             );
         }
@@ -65,9 +67,9 @@ public class SonoranCadClient {
         return requestService.sendRequest(request, params, codec);
     }
 
-    public @NotNull CompletableFuture<GetVersionResponse> getVersion() {
-        return requestService.sendRequest(Methods.GET_VERSION, Params.empty(), GetVersionResponse.CODEC);
-    }
+    // ------------------------------
+    //            Civilian
+    // ------------------------------
 
     public @NotNull CompletableFuture<List<CADCharacter>> getCharactersByCommunityId(@NotNull String communityUserId) {
         return requestService.sendRequest(Methods.GET_CHARACTERS, Params.of("communityUserId", communityUserId), CADCharacter.CODEC.list());
@@ -79,6 +81,16 @@ public class SonoranCadClient {
 
     public @NotNull CompletableFuture<List<CADCharacter>> geCharactersByAccountUuid(@NotNull UUID accountUuid) {
         return requestService.sendRequest(Methods.GET_CHARACTERS, Params.of("accountUuid", accountUuid), CADCharacter.CODEC.list());
+    }
+
+    // ------------------------------
+    //     General - Accounts
+    // ------------------------------
+
+    public @NotNull CompletableFuture<CreateCommunityLinkResponse> createCommunityLink(
+            @NotNull String communityUserId
+    ) {
+        return requestService.sendRequest(Methods.CREATE_COMMUNITY_LINK, Params.of("communityUserId", communityUserId), CreateCommunityLinkResponse.CODEC);
     }
 
     public @NotNull CompletableFuture<CADAccount> getAccountByUsername(@NotNull String username) {
@@ -122,6 +134,14 @@ public class SonoranCadClient {
             @NotNull CADAccount.Status status
     ) {
         return getAccounts(username, limit, offset, status.ordinal());
+    }
+
+    // ------------------------------
+    //     General - Configuration
+    // ------------------------------
+
+    public @NotNull CompletableFuture<GetVersionResponse> getVersion() {
+        return requestService.sendRequest(Methods.GET_VERSION, Params.empty(), GetVersionResponse.CODEC);
     }
 
 //

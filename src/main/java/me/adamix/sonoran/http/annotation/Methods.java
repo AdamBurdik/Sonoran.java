@@ -1,6 +1,7 @@
 package me.adamix.sonoran.http.annotation;
 
 import me.adamix.sonoran.cad.request.civilian.GetCharactersRequest;
+import me.adamix.sonoran.cad.request.general.accounts.CreateCommunityLinkRequest;
 import me.adamix.sonoran.cad.request.general.accounts.GetAccountRequest;
 import me.adamix.sonoran.cad.request.general.accounts.GetAccountsRequest;
 import me.adamix.sonoran.cad.request.general.configuration.GetVersionRequest;
@@ -19,10 +20,16 @@ import java.util.Map;
 
 public class Methods {
     public static final SonoranRequest
+            // General - Configuration
             GET_VERSION = create(GetVersionRequest.class),
+
+            // Civilian
             GET_CHARACTERS = createGet(GetCharactersRequest.class),
+
+            // General - Accounts
             GET_ACCOUNT = createGet(GetAccountRequest.class),
-            GET_ACCOUNTS = createGet(GetAccountsRequest.class);
+            GET_ACCOUNTS = createGet(GetAccountsRequest.class),
+            CREATE_COMMUNITY_LINK = createPost(CreateCommunityLinkRequest.class);
 
 
     @ApiStatus.Internal
@@ -40,7 +47,7 @@ public class Methods {
     public static SonoranRequest createGet(@NotNull Class<?> clazz) {
         GetMethod annotation = clazz.getAnnotation(GetMethod.class);
 
-        return sonoranRequest(clazz, annotation.url(), annotation.headers(), annotation.rateLimit());
+        return sonoranRequest(clazz, annotation.url(), annotation.headers(), annotation.rateLimit(), Method.GET);
     }
 
     @ApiStatus.Internal
@@ -48,10 +55,9 @@ public class Methods {
             @NotNull Class<?> clazz,
             String url,
             String[] headerArray,
-            int rateLimit
+            int rateLimit,
+            @NotNull Method method
     ) {
-        Method method = Method.GET;
-
         Map<String, String> headers = new HashMap<>(headerArray.length / 2);
 
         for (int i = 0; i < headerArray.length; i += 2) {
@@ -72,7 +78,7 @@ public class Methods {
     private static SonoranRequest createPost(@NotNull Class<?> clazz) {
         PostMethod annotation = clazz.getAnnotation(PostMethod.class);
 
-        return sonoranRequest(clazz, annotation.url(), annotation.headers(), annotation.rateLimit());
+        return sonoranRequest(clazz, annotation.url(), annotation.headers(), annotation.rateLimit(), Method.POST);
     }
 
     private static @NotNull List<ParamDefinition> resolveParams(@NotNull Class<?> clazz) {

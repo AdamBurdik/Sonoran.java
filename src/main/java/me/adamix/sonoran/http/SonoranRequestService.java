@@ -118,7 +118,7 @@ public class SonoranRequestService {
                     case 429 -> new RateLimitException(response.statusCode(), body, "Rate limit exceeded: " + body);
                     default  -> response.statusCode() >= 500
                             ? new ServerException(response.statusCode(), body, "Server error: " + body)
-                            : new ApiException(response.statusCode(), body, "Request failed: " + body);
+                            : new ApiException(response.statusCode(), body, "Request failed (status_code: " + response.statusCode() + "): " + body);
                 };
 
             } catch (IOException e) {
