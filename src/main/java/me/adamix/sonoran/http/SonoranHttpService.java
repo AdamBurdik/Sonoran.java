@@ -67,35 +67,4 @@ public class SonoranHttpService {
 
         return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
     }
-
-    public @NotNull HttpResponse<String> sendGetRequest(
-            @NotNull String url,
-            @NotNull Map<String, String> headers
-    ) throws IOException, InterruptedException {
-        HttpRequest.Builder builder = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .GET();
-
-        headers.forEach(builder::header);
-
-        HttpRequest request = builder.build();
-
-        return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-    }
-
-    public @NotNull HttpResponse<String> sendPostRequest(
-            @NotNull String url,
-            @NotNull Map<String, String> headers,
-            @NotNull String body
-    ) throws IOException, InterruptedException {
-        HttpRequest.Builder builder = HttpRequest.newBuilder()
-                .uri(URI.create(url))
-                .POST(HttpRequest.BodyPublishers.ofString(body));
-
-        headers.forEach(builder::header);
-
-        HttpRequest request = builder.build();
-
-        return httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-    }
 }
