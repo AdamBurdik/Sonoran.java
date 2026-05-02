@@ -1,4 +1,4 @@
-package me.adamix.sonoran.cad.request.general;
+package me.adamix.sonoran.cad.request.general.accounts;
 
 import me.adamix.sonoran.http.annotation.GetMethod;
 import me.adamix.sonoran.http.annotation.Param;

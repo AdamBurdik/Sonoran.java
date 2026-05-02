@@ -1,4 +1,4 @@
-package me.adamix.sonoran.cad.request.general;
+package me.adamix.sonoran.cad.request.general.configuration;
 
 import me.adamix.sonoran.http.annotation.GetMethod;
 

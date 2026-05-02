@@ -1,8 +1,8 @@
 package me.adamix.sonoran.http.annotation;
 
 import me.adamix.sonoran.cad.request.civilian.GetCharactersRequest;
-import me.adamix.sonoran.cad.request.general.GetAccountRequest;
-import me.adamix.sonoran.cad.request.general.GetVersionRequest;
+import me.adamix.sonoran.cad.request.general.accounts.GetAccountRequest;
+import me.adamix.sonoran.cad.request.general.configuration.GetVersionRequest;
 import me.adamix.sonoran.http.Method;
 import me.adamix.sonoran.http.SonoranRequest;
 import me.adamix.sonoran.http.param.ParamDefinition;

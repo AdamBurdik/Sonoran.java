@@ -4,7 +4,7 @@ import alpine.json.codec.Codec;
 import lombok.Builder;
 import me.adamix.sonoran.cad.data.CADAccount;
 import me.adamix.sonoran.cad.data.CADCharacter;
-import me.adamix.sonoran.cad.request.general.GetVersionResponse;
+import me.adamix.sonoran.cad.request.general.configuration.GetVersionResponse;
 import me.adamix.sonoran.http.SonoranHttpService;
 import me.adamix.sonoran.http.SonoranRequest;
 import me.adamix.sonoran.http.SonoranRequestService;
