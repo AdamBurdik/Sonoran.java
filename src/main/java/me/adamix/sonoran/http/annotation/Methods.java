@@ -2,6 +2,7 @@ package me.adamix.sonoran.http.annotation;
 
 import me.adamix.sonoran.cad.request.civilian.GetCharactersRequest;
 import me.adamix.sonoran.cad.request.general.accounts.GetAccountRequest;
+import me.adamix.sonoran.cad.request.general.accounts.GetAccountsRequest;
 import me.adamix.sonoran.cad.request.general.configuration.GetVersionRequest;
 import me.adamix.sonoran.http.Method;
 import me.adamix.sonoran.http.SonoranRequest;
@@ -20,7 +21,8 @@ public class Methods {
     public static final SonoranRequest
             GET_VERSION = create(GetVersionRequest.class),
             GET_CHARACTERS = createGet(GetCharactersRequest.class),
-            GET_ACCOUNT = createGet(GetAccountRequest.class);
+            GET_ACCOUNT = createGet(GetAccountRequest.class),
+            GET_ACCOUNTS = createGet(GetAccountsRequest.class);
 
 
     @ApiStatus.Internal

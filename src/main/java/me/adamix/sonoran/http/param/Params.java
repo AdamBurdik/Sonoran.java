@@ -1,6 +1,5 @@
 package me.adamix.sonoran.http.param;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tools.jackson.databind.ObjectMapper;
@@ -41,8 +40,8 @@ public class Params {
         for (Map.Entry<String, Object> entry : map.entrySet()) {
             joiner.add(
                     URLEncoder.encode(entry.getKey(), StandardCharsets.UTF_8)
-                    + "="
-                    + URLEncoder.encode(String.valueOf(entry.getValue()), StandardCharsets.UTF_8)
+                            + "="
+                            + URLEncoder.encode(String.valueOf(entry.getValue()), StandardCharsets.UTF_8)
             );
         }
         return joiner.toString();
@@ -55,9 +54,29 @@ public class Params {
     }
 
     public static Params of(String k1, Object v1, String k2, Object v2) {
-        Params params = new Params();
-        params.map.put(k1, v1);
+        Params params = of(k1, v1);
         params.map.put(k2, v2);
+        return params;
+    }
+
+    public static Params of(
+            String k1, Object v1,
+            String k2, Object v2,
+            String k3, Object v3
+    ) {
+        Params params = of(k1, v1, k2, v2);
+        params.map.put(k3, v3);
+        return params;
+    }
+
+    public static Params of(
+            String k1, Object v1,
+            String k2, Object v2,
+            String k3, Object v3,
+            String k4, Object v4
+    ) {
+        Params params = of(k1, v1, k2, v2, k3, v3);
+        params.map.put(k4, v4);
         return params;
     }
 

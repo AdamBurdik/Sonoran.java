@@ -4,6 +4,8 @@ import alpine.json.codec.Codec;
 import lombok.Builder;
 import me.adamix.sonoran.cad.data.CADAccount;
 import me.adamix.sonoran.cad.data.CADCharacter;
+import me.adamix.sonoran.cad.request.general.accounts.GetAccountsRequest;
+import me.adamix.sonoran.cad.request.general.accounts.GetAccountsResponse;
 import me.adamix.sonoran.cad.request.general.configuration.GetVersionResponse;
 import me.adamix.sonoran.http.SonoranHttpService;
 import me.adamix.sonoran.http.SonoranRequest;
@@ -93,6 +95,33 @@ public class SonoranCadClient {
 
     public @NotNull CompletableFuture<CADAccount> getAccountByCommunityId(@NotNull String communityUserId) {
         return requestService.sendRequest(Methods.GET_ACCOUNT, Params.of("communityUserId", communityUserId), CADAccount.CODEC);
+    }
+
+    public @NotNull CompletableFuture<GetAccountsResponse> getAccounts(
+            @NotNull String username,
+            int limit,
+            int offset,
+            int status
+    ) {
+        return requestService.sendRequest(
+                Methods.GET_ACCOUNTS,
+                Params.of(
+                        "limit", limit,
+                        "offset", offset,
+                        "status", status,
+                        "username", username
+                ),
+                GetAccountsResponse.CODEC
+        );
+    }
+
+    public @NotNull CompletableFuture<GetAccountsResponse> getAccounts(
+            @NotNull String username,
+            int limit,
+            int offset,
+            @NotNull CADAccount.Status status
+    ) {
+        return getAccounts(username, limit, offset, status.ordinal());
     }
 
 //
