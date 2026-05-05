@@ -3,14 +3,31 @@
 # Sonoran.java
 Sonoran.java is a library that allows you to interact with the [Sonoran CAD](https://sonorancad.com/) API.
 
-# Disclaimer
-This library is a work in progress — many endpoints are not yet implemented.  
-I plan to support all major Sonoran CAD API endpoints in future updates.
+# v2
+v2 branch is rewrite of library logic and implementation of [sonoran v2 api](https://docs.sonoransoftware.com/cad/api-integration/api-endpoints-v2)
+
+New api provides actual http methods and rate limit info. So it should be used instead the legacy one.
+
+> [!NOTE]
+> This library is a work in progress. Many endpoints are not implemented yet.  
+> I implemented just few required by my project.  
+
+# Usage
+
+This library implements HTTP and Web socket API for sonoran CAD
+
+Check out the separate docs:
+- [Http Client API](./docs/cad-http-client.md)
+- [WS Client API](./docs/cad-ws-client.md)
+
+# Requirements
+- Java 25+ is required
 
 # How To Build
+
 1. Clone the repository
 ```bash
-   git clone https://github.com/adamBurdik/Sonoran.java
+   git clone --branch v2 --single-branch git@github.com:AdamBurdik/Sonoran.java.git
 ```
 2. Navigate to the directory
 ```bash
@@ -21,38 +38,15 @@ I plan to support all major Sonoran CAD API endpoints in future updates.
    gradlew build
 ```
 
-# How To Use
-1. Add Sonoran.java as a dependency to your project, using jitpack
+# Dependency
+You can add Sonoran.java as a dependency to your project, using jitpack
 ```kotlin
 maven { url = uri("https://www.jitpack.io") }
 
 dependencies {
-    implementation("com.github.adamBurdik:Sonoran.java:VERSION") // Get version from https://github.com/AdamBurdik/Sonoran.java/releases
+    // Newest v2 commit
+    implementation("com.github.adamBurdik:Sonoran.java:v2-SNAPSHOT")
 }
-```
-2. Create Sonoran instance with cad. 
-```java
-Sonoran sonoran = Sonoran.builder()
-        .withCad("CAD_API_TOKEN_HERE", "CAD_COMMUNITY_ID_HERE")
-        .build();
-
-// Shuts down the internal HTTP client and task executor.
-// Call this method during application shutdown to clean up resources.
-sonoran.shutdown();
-```
-3. Use provided methods
-```java
-// Prints the current Sonoran CAD version
-sonoran.cad().getVersion()
-    .onSuccess(version -> System.out.println("Version: " + version))
-    .onError(error -> System.out.println("API error: " + error.message())) // Use onError to handle unsuccessful API responses
-    .onException(Throwable::printStackTrace); // Use onException to handle unexpected internal errors
-
-// Retrieves the CAD Account for the provided username
-sonoran.cad().getAccount("ACCOUNT_NAME_HERE")
-    .onSuccess(account -> System.out.println("Found account: " + account))
-    .onError(error -> System.out.println("API error: " + error.message()))
-    .onException(Throwable::printStackTrace);
 ```
 
 # Contributing
@@ -61,8 +55,6 @@ Contributions are welcome!
 If you have suggestions, ideas, or issues, feel free to open an issue or contact me on discord: @adamix.dev.
 
 # Credits
-[Sonoran CAD Docs](https://docs.sonoransoftware.com/cad/api-integration/) - Documentation for Sonoran CAD API
-
 [sonoran.js](https://github.com/Sonoran-Software/Sonoran.js) - Initial idea to create a library for java
 
-[minestom](https://github.com/Minestom/Minestom/) - Codec design
+[alpine](https://github.com/mudkipdev/alpine) - Awesome codec library
