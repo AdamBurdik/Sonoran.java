@@ -2,6 +2,10 @@ package me.adamix.sonoran.http;
 
 import alpine.json.codec.Codec;
 import com.google.common.util.concurrent.RateLimiter;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import lombok.extern.slf4j.Slf4j;
 import me.adamix.sonoran.http.exception.ApiException;
 import me.adamix.sonoran.http.exception.BadRequestException;
@@ -14,10 +18,8 @@ import me.adamix.sonoran.http.exception.ServerException;
 import me.adamix.sonoran.http.exception.UnauthorizedException;
 import me.adamix.sonoran.http.param.ParamDefinition;
 import me.adamix.sonoran.http.param.Params;
-import me.adamix.sonoran.transcoder.JacksonTranscoder;
+import me.adamix.sonoran.transcoder.GsonTranscoder;
 import org.jetbrains.annotations.NotNull;
-import tools.jackson.databind.JsonNode;
-import tools.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
 import java.net.http.HttpResponse;
@@ -28,12 +30,14 @@ import java.util.concurrent.CompletionException;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 @Slf4j
 @SuppressWarnings("UnstableApiUsage")
 public class SonoranRequestService {
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private static final Gson gson = new GsonBuilder()
+            .serializeNulls()
+            .create();
+
     private final SonoranHttpService httpService;
     private final ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
     private final Map<String, RateLimiter> limiters = new ConcurrentHashMap<>();
@@ -88,7 +92,7 @@ public class SonoranRequestService {
                     if (!paramObject.getClass().equals(param.getType())) {
                         throw new InvalidParamTypeException(
                                 "Parameter '%s' expects %s but instead got %s"
-                                .formatted(paramKey, param.getType().getName(), paramObject.getClass().getName())
+                                        .formatted(paramKey, param.getType().getName(), paramObject.getClass().getName())
                         );
                     }
                 }
@@ -105,18 +109,19 @@ public class SonoranRequestService {
                 log.debug("Response body url={} status={} body={}", url, response.statusCode(), response.body());
 
                 if (response.statusCode() >= 200 && response.statusCode() <= 299) {
-                    JsonNode json = objectMapper.readTree(response.body());
-                    return responseCodec.decode(JacksonTranscoder.INSTANCE, json);
+                    JsonElement element = JsonParser.parseString(response.body());
+                    return responseCodec.decode(GsonTranscoder.INSTANCE, element);
                 }
 
                 String body = response.body();
                 throw switch (response.statusCode()) {
                     case 400 -> new BadRequestException(response.statusCode(), body, "Bad request: " + body);
-                    case 401 -> new UnauthorizedException(response.statusCode(), body, "Invalid authorization: " + body);
+                    case 401 ->
+                            new UnauthorizedException(response.statusCode(), body, "Invalid authorization: " + body);
                     case 403 -> new ForbiddenException(response.statusCode(), body, "Access forbidden: " + body);
                     case 404 -> new NotFoundException(response.statusCode(), body, "Resource not found: " + body);
                     case 429 -> new RateLimitException(response.statusCode(), body, "Rate limit exceeded: " + body);
-                    default  -> response.statusCode() >= 500
+                    default -> response.statusCode() >= 500
                             ? new ServerException(response.statusCode(), body, "Server error: " + body)
                             : new ApiException(response.statusCode(), body, "Request failed (status_code: " + response.statusCode() + "): " + body);
                 };

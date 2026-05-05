@@ -2,10 +2,10 @@ package me.adamix.sonoran.cad;
 
 import alpine.json.codec.Codec;
 import lombok.Builder;
+import me.adamix.sonoran.SonoranURL;
 import me.adamix.sonoran.cad.data.CADAccount;
 import me.adamix.sonoran.cad.data.CADCharacter;
 import me.adamix.sonoran.cad.request.general.accounts.CreateCommunityLinkResponse;
-import me.adamix.sonoran.cad.request.general.accounts.GetAccountsRequest;
 import me.adamix.sonoran.cad.request.general.accounts.GetAccountsResponse;
 import me.adamix.sonoran.cad.request.general.configuration.GetVersionResponse;
 import me.adamix.sonoran.http.SonoranHttpService;
@@ -13,7 +13,6 @@ import me.adamix.sonoran.http.SonoranRequest;
 import me.adamix.sonoran.http.SonoranRequestService;
 import me.adamix.sonoran.http.annotation.Methods;
 import me.adamix.sonoran.http.param.Params;
-import me.adamix.sonoran.SonoranURL;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 

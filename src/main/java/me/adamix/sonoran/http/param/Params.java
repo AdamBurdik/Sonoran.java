@@ -1,8 +1,8 @@
 package me.adamix.sonoran.http.param;
 
+import com.google.gson.Gson;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tools.jackson.databind.ObjectMapper;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -11,7 +11,8 @@ import java.util.Map;
 import java.util.StringJoiner;
 
 public class Params {
-    private static final ObjectMapper MAPPER = new ObjectMapper();
+    private static final Gson gson = new Gson();
+
     private final Map<String, Object> map = new HashMap<>();
 
     public boolean hasParam(@NotNull String key) {
@@ -31,7 +32,7 @@ public class Params {
     }
 
     public String toJson() {
-        return MAPPER.writeValueAsString(map);
+        return gson.toJson(map);
     }
 
     public String toQueryString() {

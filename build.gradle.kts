@@ -16,11 +16,12 @@ dependencies {
 
     implementation("dev.mudkip:alpine-json:0.5.1")
 
-    implementation("com.fasterxml.jackson.core:jackson-core:2.21.3")
-    implementation("tools.jackson.core:jackson-databind:3.1.2")
+    implementation("com.google.code.gson:gson:2.14.0")
     implementation("com.google.guava:guava:33.5.0-jre")
 
     implementation("org.jetbrains:annotations:26.0.2")
+
+    implementation("com.microsoft.signalr:signalr:11.0.0-preview.3.26207.106")
 
     // Lombok stuff
     compileOnly("org.projectlombok:lombok:1.18.46")
