@@ -9,6 +9,8 @@ import me.adamix.sonoran.cad.data.CADAccount;
 import me.adamix.sonoran.cad.data.CADCharacter;
 import me.adamix.sonoran.cad.request.general.accounts.CreateCommunityLinkResponse;
 import me.adamix.sonoran.cad.request.general.accounts.GetAccountsResponse;
+import me.adamix.sonoran.cad.request.general.configuration.GetInfoRequest;
+import me.adamix.sonoran.cad.request.general.configuration.GetInfoResponse;
 import me.adamix.sonoran.cad.request.general.configuration.GetVersionResponse;
 import me.adamix.sonoran.http.SonoranHttpService;
 import me.adamix.sonoran.http.SonoranRequest;
@@ -163,6 +165,10 @@ public class SonoranCadClient {
 
     public @NotNull CompletableFuture<GetVersionResponse> getVersion() {
         return requestService.sendRequest(Methods.GET_VERSION, Params.empty(), new TypeToken<>() {});
+    }
+
+    public @NotNull CompletableFuture<GetInfoResponse> getInfo() {
+        return requestService.sendRequest(Methods.GET_INFO, Params.empty(), new TypeToken<>() {});
     }
 
 //

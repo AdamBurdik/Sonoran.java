@@ -4,6 +4,7 @@ import me.adamix.sonoran.cad.request.civilian.GetCharactersRequest;
 import me.adamix.sonoran.cad.request.general.accounts.CreateCommunityLinkRequest;
 import me.adamix.sonoran.cad.request.general.accounts.GetAccountRequest;
 import me.adamix.sonoran.cad.request.general.accounts.GetAccountsRequest;
+import me.adamix.sonoran.cad.request.general.configuration.GetInfoRequest;
 import me.adamix.sonoran.cad.request.general.configuration.GetVersionRequest;
 import me.adamix.sonoran.http.Method;
 import me.adamix.sonoran.http.SonoranRequest;
@@ -22,6 +23,7 @@ public class Methods {
     public static final SonoranRequest
             // General - Configuration
             GET_VERSION = create(GetVersionRequest.class),
+            GET_INFO = createGet(GetInfoRequest.class),
 
             // Civilian
             GET_CHARACTERS = createGet(GetCharactersRequest.class),
