@@ -56,5 +56,3 @@ If you have suggestions, ideas, or issues, feel free to open an issue or contact
 
 # Credits
 [sonoran.js](https://github.com/Sonoran-Software/Sonoran.js) - Initial idea to create a library for java
-
-[alpine](https://github.com/mudkipdev/alpine) - Awesome codec library
