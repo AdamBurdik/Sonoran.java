@@ -14,8 +14,6 @@ repositories {
 dependencies {
     api("org.slf4j:slf4j-api:2.0.9")
 
-    implementation("dev.mudkip:alpine-json:0.5.1")
-
     implementation("com.google.code.gson:gson:2.14.0")
     implementation("com.google.guava:guava:33.5.0-jre")
 

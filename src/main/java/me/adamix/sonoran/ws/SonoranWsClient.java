@@ -1,6 +1,7 @@
 package me.adamix.sonoran.ws;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.microsoft.signalr.HubConnection;
@@ -10,22 +11,24 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import me.adamix.sonoran.SonoranURL;
-import me.adamix.sonoran.ws.event.registry.EventTypeRegistry;
+import me.adamix.sonoran.cad.data.CADAccount;
+import me.adamix.sonoran.json.TypeAdapters;
 import me.adamix.sonoran.ws.event.WSEvent;
+import me.adamix.sonoran.ws.event.registry.EventTypeRegistry;
 import me.adamix.sonoran.ws.exception.WSAuthException;
 import me.adamix.sonoran.ws.exception.WSConnectionException;
 import me.adamix.sonoran.ws.response.AuthResponse;
 import org.jetbrains.annotations.NotNull;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 @Slf4j
 @Builder(builderClassName = "Builder")
 public class SonoranWsClient {
-    private static final Gson gson = new Gson();
-
     private final String apiKey;
     private final String communityId;
     private final Integer serverId;
@@ -33,6 +36,7 @@ public class SonoranWsClient {
     private final HubConnection connection;
     @Getter
     private final EventTypeRegistry registry;
+    private final Gson gson;
 
     private final Map<Class<? extends WSEvent>, Consumer<WSEvent>> listeners = new HashMap<>();
 
@@ -55,6 +59,7 @@ public class SonoranWsClient {
     public static class Builder {
         private HubConnection connection = null;
         private EventTypeRegistry registry = null;
+        private Gson gson = null;
 
         public Builder url(@NotNull SonoranURL url) {
             this.url = url.getUrl();
@@ -68,6 +73,14 @@ public class SonoranWsClient {
                     .build();
         }
 
+        private Gson createGson() {
+            return new GsonBuilder()
+                    .registerTypeAdapter(UUID.class, new TypeAdapters.UUIDAdapter())
+                    .registerTypeAdapter(Instant.class, new TypeAdapters.InstantAdapter())
+                    .registerTypeAdapter(CADAccount.Status.class, TypeAdapters.ordinal(CADAccount.Status.class))
+                    .create();
+        }
+
         public SonoranWsClient build() {
             if (this.connection == null) {
                 this.connection = createConnection();
@@ -75,7 +88,18 @@ public class SonoranWsClient {
             if (this.registry == null) {
                 this.registry = new EventTypeRegistry();
             }
-            return new SonoranWsClient(apiKey, communityId, serverId, url, connection, registry);
+            if (gson == null) {
+                gson = createGson();
+            }
+            return new SonoranWsClient(
+                    apiKey,
+                    communityId,
+                    serverId,
+                    url,
+                    connection,
+                    registry,
+                    gson
+            );
         }
     }
 

@@ -1,11 +1,8 @@
 package me.adamix.sonoran.http;
 
-import alpine.json.codec.Codec;
 import com.google.common.util.concurrent.RateLimiter;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
+import com.google.gson.reflect.TypeToken;
 import lombok.extern.slf4j.Slf4j;
 import me.adamix.sonoran.http.exception.ApiException;
 import me.adamix.sonoran.http.exception.BadRequestException;
@@ -18,7 +15,6 @@ import me.adamix.sonoran.http.exception.ServerException;
 import me.adamix.sonoran.http.exception.UnauthorizedException;
 import me.adamix.sonoran.http.param.ParamDefinition;
 import me.adamix.sonoran.http.param.Params;
-import me.adamix.sonoran.transcoder.GsonTranscoder;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -34,10 +30,7 @@ import java.util.concurrent.Executors;
 @Slf4j
 @SuppressWarnings("UnstableApiUsage")
 public class SonoranRequestService {
-    private static final Gson gson = new GsonBuilder()
-            .serializeNulls()
-            .create();
-
+    private final Gson gson;
     private final SonoranHttpService httpService;
     private final ExecutorService executor = Executors.newVirtualThreadPerTaskExecutor();
     private final Map<String, RateLimiter> limiters = new ConcurrentHashMap<>();
@@ -46,10 +39,12 @@ public class SonoranRequestService {
     private final Map<String, String> defaultHeaders;
 
     public SonoranRequestService(
+            @NotNull Gson gson,
             @NotNull SonoranHttpService httpService,
             @NotNull String baseUrl,
             @NotNull Map<String, String> defaultHeaders
     ) {
+        this.gson = gson;
         this.httpService = httpService;
         this.baseUrl = baseUrl;
         this.defaultHeaders = defaultHeaders;
@@ -62,7 +57,7 @@ public class SonoranRequestService {
     public <T> @NotNull CompletableFuture<T> sendRequest(
             @NotNull SonoranRequest request,
             @NotNull Params params,
-            @NotNull Codec<T> responseCodec
+            @NotNull TypeToken<T> typeToken
     ) {
         return CompletableFuture.supplyAsync(() -> {
             String url = null;
@@ -109,8 +104,7 @@ public class SonoranRequestService {
                 log.debug("Response body url={} status={} body={}", url, response.statusCode(), response.body());
 
                 if (response.statusCode() >= 200 && response.statusCode() <= 299) {
-                    JsonElement element = JsonParser.parseString(response.body());
-                    return responseCodec.decode(GsonTranscoder.INSTANCE, element);
+                    return gson.fromJson(response.body(), typeToken);
                 }
 
                 String body = response.body();
