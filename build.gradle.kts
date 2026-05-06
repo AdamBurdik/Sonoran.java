@@ -44,3 +44,7 @@ tasks.shadowJar {
 tasks.build {
     dependsOn(tasks.shadowJar)
 }
+
+tasks.test {
+    failOnNoDiscoveredTests = false
+}
