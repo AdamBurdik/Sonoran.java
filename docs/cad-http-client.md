@@ -56,7 +56,7 @@ public interface GetVersionRequest {
 
 ### 2. You may also need response data
 
-This library is using [alpine codecs](https://github.com/mudkipdev/alpine) for deserialization.
+Response data is just simple record.
 
 GetVersion response is this:
 ```json
@@ -66,20 +66,23 @@ GetVersion response is this:
 }
 ```
 
-You can create record with static codec:
+You can create record:
 
 ```java
 public record GetVersionResponse(
     int version,
     @NotNull String name
 ) {
-    public static final Codec<GetVersionResponse> CODEC = Codec.<GetVersionResponse>builder()
-            .with("version", Codec.INTEGER, GetVersionResponse::version)
-            .with("name", Codec.STRING, GetVersionResponse::name)
-            .build(GetVersionResponse::new);
-
 }
 ```
+
+Internally GSON is used for deserialization.
+
+For more complex data you may need to register your own type adapters.
+
+You can supply your own GSON instance to builder. 
+
+For built-in type adapters see [TypeAdapters.java](../src/main/java/me/adamix/sonoran/json/TypeAdapters.java).
 
 ### 3. Parsing annotation
 Request annotation needs to be parsed. By default its done using functions in Methods class.
@@ -110,6 +113,6 @@ GetVersionRequest request = MyCustomMethods.GET_VERSION;
 CompletableFuture<GetVersionRequest> response = cad.sendRequest(
         request,
         Params.empty(),
-        GetVersionResponse.CODEC
+        new TypeToken<>() {}
 );
 ```
