@@ -12,6 +12,7 @@ import me.adamix.sonoran.cad.request.general.accounts.GetAccountsResponse;
 import me.adamix.sonoran.cad.request.general.configuration.GetInfoRequest;
 import me.adamix.sonoran.cad.request.general.configuration.GetInfoResponse;
 import me.adamix.sonoran.cad.request.general.configuration.GetVersionResponse;
+import me.adamix.sonoran.cad.request.general.records.UpdateRecordResponse;
 import me.adamix.sonoran.http.SonoranHttpService;
 import me.adamix.sonoran.http.SonoranRequest;
 import me.adamix.sonoran.http.SonoranRequestService;
@@ -171,8 +172,128 @@ public class SonoranCadClient {
         return requestService.sendRequest(Methods.GET_INFO, Params.empty(), new TypeToken<>() {});
     }
 
-//
-//    public @NotNull CompletableFuture<HeartBeatResponse> heartbeat(int serverId) {
-//        return requestService.sendRequest(new HeartBeatRequest(serverId), HeartBeatResponse.CODEC);
-//    }
+    // ------------------------------
+    //       General - Records
+    // ------------------------------
+
+    public @NotNull CompletableFuture<UpdateRecordResponse> updateRecord(
+            int recordId,
+            @NotNull Map<String, Object> record
+    ) {
+        return requestService.sendRequest(
+                Methods.UPDATE_RECORD,
+                Params.of("recordId", recordId, "record", record),
+                new TypeToken<>() {}
+        );
+    }
+
+    public @NotNull CompletableFuture<UpdateRecordResponse> updateRecord(
+            int recordId,
+            @NotNull String communityUserId,
+            @NotNull Map<String, Object> record
+    ) {
+        return requestService.sendRequest(
+                Methods.UPDATE_RECORD,
+                Params.of("recordId", recordId, "communityUserId", communityUserId, "record", record),
+                new TypeToken<>() {}
+        );
+    }
+
+    public @NotNull CompletableFuture<UpdateRecordResponse> updateRecordByRoblox(
+            int recordId,
+            @NotNull String roblox,
+            @NotNull Map<String, Object> record
+    ) {
+        return requestService.sendRequest(
+                Methods.UPDATE_RECORD,
+                Params.of("recordId", recordId, "roblox", roblox, "record", record),
+                new TypeToken<>() {}
+        );
+    }
+
+    public @NotNull CompletableFuture<UpdateRecordResponse> updateRecordByAccountUuid(
+            int recordId,
+            @NotNull UUID accountUuid,
+            @NotNull Map<String, Object> record
+    ) {
+        return requestService.sendRequest(
+                Methods.UPDATE_RECORD,
+                Params.of("recordId", recordId, "accountUuid", accountUuid, "record", record),
+                new TypeToken<>() {}
+        );
+    }
+
+    public @NotNull CompletableFuture<UpdateRecordResponse> updateRecordWithTemplate(
+            int recordId,
+            int templateId,
+            @NotNull Map<String, Object> replaceValues
+    ) {
+        return requestService.sendRequest(
+                Methods.UPDATE_RECORD,
+                Params.of(
+                        "recordId", recordId,
+                        "templateId", templateId,
+                        "useDictionary", true,
+                        "replaceValues", replaceValues
+                ),
+                new TypeToken<>() {}
+        );
+    }
+
+    public @NotNull CompletableFuture<UpdateRecordResponse> updateRecordWithTemplate(
+            int recordId,
+            int templateId,
+            @NotNull String communityUserId,
+            @NotNull Map<String, Object> replaceValues
+    ) {
+        return requestService.sendRequest(
+                Methods.UPDATE_RECORD,
+                Params.of(
+                        "recordId", recordId,
+                        "templateId", templateId,
+                        "useDictionary", true,
+                        "communityUserId", communityUserId,
+                        "replaceValues", replaceValues
+                ),
+                new TypeToken<>() {}
+        );
+    }
+
+    public @NotNull CompletableFuture<UpdateRecordResponse> updateRecordWithTemplateByRoblox(
+            int recordId,
+            int templateId,
+            @NotNull String roblox,
+            @NotNull Map<String, Object> replaceValues
+    ) {
+        return requestService.sendRequest(
+                Methods.UPDATE_RECORD,
+                Params.of(
+                        "recordId", recordId,
+                        "templateId", templateId,
+                        "useDictionary", true,
+                        "roblox", roblox,
+                        "replaceValues", replaceValues
+                ),
+                new TypeToken<>() {}
+        );
+    }
+
+    public @NotNull CompletableFuture<UpdateRecordResponse> updateRecordWithTemplateByAccountUuid(
+            int recordId,
+            int templateId,
+            @NotNull UUID accountUuid,
+            @NotNull Map<String, Object> replaceValues
+    ) {
+        return requestService.sendRequest(
+                Methods.UPDATE_RECORD,
+                Params.of(
+                        "recordId", recordId,
+                        "templateId", templateId,
+                        "useDictionary", true,
+                        "accountUuid", accountUuid,
+                        "replaceValues", replaceValues
+                ),
+                new TypeToken<>() {}
+        );
+    }
 }

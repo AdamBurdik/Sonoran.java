@@ -6,6 +6,7 @@ import me.adamix.sonoran.cad.request.general.accounts.GetAccountRequest;
 import me.adamix.sonoran.cad.request.general.accounts.GetAccountsRequest;
 import me.adamix.sonoran.cad.request.general.configuration.GetInfoRequest;
 import me.adamix.sonoran.cad.request.general.configuration.GetVersionRequest;
+import me.adamix.sonoran.cad.request.general.records.UpdateRecordRequest;
 import me.adamix.sonoran.http.Method;
 import me.adamix.sonoran.http.SonoranRequest;
 import me.adamix.sonoran.http.param.ParamDefinition;
@@ -31,7 +32,10 @@ public class Methods {
             // General - Accounts
             GET_ACCOUNT = createGet(GetAccountRequest.class),
             GET_ACCOUNTS = createGet(GetAccountsRequest.class),
-            CREATE_COMMUNITY_LINK = createPost(CreateCommunityLinkRequest.class);
+            CREATE_COMMUNITY_LINK = createPost(CreateCommunityLinkRequest.class),
+
+            // General - Records
+            UPDATE_RECORD = createPatch(UpdateRecordRequest.class);
 
 
     @ApiStatus.Internal
@@ -50,6 +54,18 @@ public class Methods {
         GetMethod annotation = clazz.getAnnotation(GetMethod.class);
 
         return sonoranRequest(clazz, annotation.url(), annotation.headers(), annotation.rateLimit(), Method.GET);
+    }
+
+    private static SonoranRequest createPost(@NotNull Class<?> clazz) {
+        PostMethod annotation = clazz.getAnnotation(PostMethod.class);
+
+        return sonoranRequest(clazz, annotation.url(), annotation.headers(), annotation.rateLimit(), Method.POST);
+    }
+
+    private static SonoranRequest createPatch(@NotNull Class<?> clazz) {
+        PatchMethod annotation = clazz.getAnnotation(PatchMethod.class);
+
+        return sonoranRequest(clazz, annotation.url(), annotation.headers(), annotation.rateLimit(), Method.PATCH);
     }
 
     @ApiStatus.Internal
@@ -75,12 +91,6 @@ public class Methods {
                 rateLimit,
                 params
         );
-    }
-
-    private static SonoranRequest createPost(@NotNull Class<?> clazz) {
-        PostMethod annotation = clazz.getAnnotation(PostMethod.class);
-
-        return sonoranRequest(clazz, annotation.url(), annotation.headers(), annotation.rateLimit(), Method.POST);
     }
 
     private static @NotNull List<ParamDefinition> resolveParams(@NotNull Class<?> clazz) {
