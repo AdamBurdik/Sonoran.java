@@ -80,7 +80,7 @@ public class SonoranRequestService {
                     Object paramObject = params.getParam(paramKey);
                     if (paramObject == null) continue;
 
-                    if (!paramObject.getClass().equals(param.getType())) {
+                    if (!param.getType().isAssignableFrom(paramObject.getClass())) {
                         throw new InvalidParamTypeException(
                                 "Parameter '%s' expects %s but instead got %s"
                                         .formatted(paramKey, param.getType().getName(), paramObject.getClass().getName())
