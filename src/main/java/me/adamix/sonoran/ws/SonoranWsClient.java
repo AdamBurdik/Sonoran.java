@@ -134,7 +134,7 @@ public class SonoranWsClient {
         }
 
         log.info("Authenticated, count={}", response.count);
-        connection.on(WSMethods.PUSH_EVENTS.method(), this::handleRaw, String.class);
+        connection.on(WSMethods.PUSH_EVENT.method(), this::handleRaw, String.class);
     }
 
     private void handleRaw(@NotNull String raw) {

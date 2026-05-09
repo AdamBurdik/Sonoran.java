@@ -3,7 +3,7 @@ package me.adamix.sonoran.ws;
 public enum WSMethods {
     AUTHENTICATE_V2("authenticatev2"),
 
-    PUSH_EVENTS("pushEvents");
+    PUSH_EVENT("pushEvent");
 
     private final String method;
 
