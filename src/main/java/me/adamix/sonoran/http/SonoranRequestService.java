@@ -69,11 +69,7 @@ public class SonoranRequestService {
                 Map<String, String> headers = new HashMap<>(defaultHeaders);
                 headers.putAll(request.getHeaders());
 
-                // Final url with base, endpoint and path variables
-                url = baseUrl + params.resolveUrl(request.getUrl());
-                log.info("Sending request method={} url={}", request.getMethod(), url);
-
-                // TODO Verify the params
+                // Check if all required params are present
                 for (ParamDefinition param : request.getParams()) {
                     String paramKey = param.getKey();
 
@@ -91,6 +87,10 @@ public class SonoranRequestService {
                         );
                     }
                 }
+
+                // Final url with base, endpoint and path variables
+                url = baseUrl + params.resolveUrl(request.getUrl());
+                log.info("Sending request method={} url={}", request.getMethod(), url);
 
                 HttpResponse<String> response = httpService.sendRequest(
                         request.getMethod(),
