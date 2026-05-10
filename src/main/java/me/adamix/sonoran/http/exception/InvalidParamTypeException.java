@@ -1,6 +1,6 @@
 package me.adamix.sonoran.http.exception;
 
-public class InvalidParamTypeException extends Exception {
+public class InvalidParamTypeException extends RuntimeException {
     public InvalidParamTypeException(String message) {
         super(message);
     }
